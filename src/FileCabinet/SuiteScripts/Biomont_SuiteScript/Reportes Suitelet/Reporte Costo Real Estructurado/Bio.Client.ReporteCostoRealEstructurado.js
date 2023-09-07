@@ -49,6 +49,7 @@ define(['N'],
             let subsidiary = recordContext.getValue('custpage_field_subsidiary')
             let start = recordContext.getText('custpage_field_date_from');
             let end = recordContext.getText('custpage_field_date_to');
+            let lote = recordContext.getText('custpage_field_lote').trim();
             let paginate = recordContext.getText('custpage_field_check_paginate');
 
             // Obtener url del Suitelet mediante ID del Script y ID del Despliegue
@@ -60,6 +61,7 @@ define(['N'],
                     _subsidiary: subsidiary,
                     _start: start,
                     _end: end,
+                    _lote: lote,
                     _paginate: paginate
                 }
             })
@@ -82,6 +84,7 @@ define(['N'],
             let subsidiary = recordContext.getValue('custpage_field_subsidiary')
             let start = recordContext.getText('custpage_field_date_from');
             let end = recordContext.getText('custpage_field_date_to');
+            let lote = recordContext.getText('custpage_field_lote').trim();
             let paginate = recordContext.getText('custpage_field_check_paginate');
 
             // Obtener url del Suitelet mediante ID del Script y ID del Despliegue
@@ -93,6 +96,7 @@ define(['N'],
                     _subsidiary: subsidiary,
                     _start: start,
                     _end: end,
+                    _lote: lote,
                     _paginate: paginate
                 }
             })
