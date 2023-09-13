@@ -52,16 +52,22 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                 label: 'Fecha Hasta',
                 container: 'custpage_group'
             });
-            let fieldMonthCalculateCIF = form.addField({
-                id: 'custpage_field_month_calculate_cif',
-                type: serverWidget.FieldType.SELECT,
-                label: 'Mes para el calculo del CIF',
-                container: 'custpage_group'
-            });
             let fieldLote = form.addField({
                 id: 'custpage_field_lote',
                 type: serverWidget.FieldType.TEXT,
                 label: 'Lote',
+                container: 'custpage_group'
+            });
+            let fieldYearCalculateCIF = form.addField({
+                id: 'custpage_field_year_calculate_cif',
+                type: serverWidget.FieldType.SELECT,
+                label: 'Año para el calculo del CIF',
+                container: 'custpage_group'
+            });
+            let fieldMonthCalculateCIF = form.addField({
+                id: 'custpage_field_month_calculate_cif',
+                type: serverWidget.FieldType.SELECT,
+                label: 'Mes para el calculo del CIF',
                 container: 'custpage_group'
             });
             let fieldCheckPaginate = form.addField({
@@ -69,6 +75,17 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                 type: serverWidget.FieldType.CHECKBOX,
                 label: 'Paginación',
                 container: 'custpage_group'
+            });
+
+            // Setear propiedad a campo del formulario - Buscar la documentación del modulo N/ui/serverWidget
+            fieldDateTo.updateBreakType({
+                breakType: serverWidget.FieldBreakType.STARTCOL
+            });
+            fieldYearCalculateCIF.updateBreakType({
+                breakType: serverWidget.FieldBreakType.STARTCOL
+            });
+            fieldCheckPaginate.updateBreakType({
+                breakType: serverWidget.FieldBreakType.STARTCOL
             });
 
             // Asociar ClientScript al formulario
@@ -88,7 +105,7 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
             });
 
             // Obtener datos
-            let { today, firstDayOfMonth, firstDayOfMonthPast, lastDayOfMonthPast, monthOfMonthPast } = objHelper.getDate();
+            let { today, firstDayOfMonth, firstDayOfMonthPast, lastDayOfMonthPast, yearOfMonthPast, monthOfMonthPast } = objHelper.getDate();
             let { user } = objHelper.getUser();
             subsidiary = user.subsidiary;
             dateFrom = firstDayOfMonthPast;
@@ -102,6 +119,15 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
             fieldCheckPaginate.defaultValue = checkPaginate;
 
             // Obtener datos y setear datos
+            let dataYear = objHelper.getYear();
+            dataYear.forEach(element => {
+                fieldYearCalculateCIF.addSelectOption({
+                    value: element.id,
+                    text: element.name
+                });
+            });
+            fieldYearCalculateCIF.defaultValue = yearOfMonthPast.toString();
+
             let dataMonth = objHelper.getMonth();
             dataMonth.forEach(element => {
                 fieldMonthCalculateCIF.addSelectOption({
@@ -111,7 +137,7 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
             });
             fieldMonthCalculateCIF.defaultValue = monthOfMonthPast.toString();
 
-            return { form, fieldSubsidiary, fieldDateFrom, fieldDateTo, fieldMonthCalculateCIF, fieldLote, fieldCheckPaginate }
+            return { form, fieldSubsidiary, fieldDateFrom, fieldDateTo, fieldLote, fieldYearCalculateCIF, fieldMonthCalculateCIF, fieldCheckPaginate }
         }
 
         // Crear sublista
@@ -133,7 +159,7 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
         }
 
         // Enviar email
-        function sendEmail(csvFileMD, csvFileMOD, csvFileSRV, titleDocument, form) {
+        function sendEmail(csvFileMD, csvFileMOD, csvFileSRV, csvFileCIF, titleDocument, form) {
             // Enviar email
             let { user } = objHelper.getUser();
 
@@ -142,7 +168,7 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                 recipients: user.id,
                 subject: `${titleDocument}`,
                 body: ' ',
-                attachments: [csvFileMD, csvFileMOD, csvFileSRV]
+                attachments: [csvFileMD, csvFileMOD, csvFileSRV, csvFileCIF]
             });
 
             form.addPageInitMessage({
@@ -186,7 +212,7 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
 
             if (scriptContext.request.method == 'GET') {
                 // Crear formulario
-                let { form, fieldSubsidiary, fieldDateFrom, fieldDateTo, fieldLote, fieldCheckPaginate } = createForm();
+                let { form, fieldSubsidiary, fieldDateFrom, fieldDateTo, fieldLote, fieldYearCalculateCIF, fieldMonthCalculateCIF, fieldCheckPaginate } = createForm();
 
                 // Obtener datos por url
                 let button = scriptContext.request.parameters['_button'];
@@ -194,6 +220,8 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                 let dateFrom = scriptContext.request.parameters['_start'];
                 let dateTo = scriptContext.request.parameters['_end'];
                 let lote = scriptContext.request.parameters['_lote'];
+                let year = scriptContext.request.parameters['_year'];
+                let month = scriptContext.request.parameters['_month'];
                 let checkPaginate = scriptContext.request.parameters['_paginate'];
 
                 if (button == 'consultar') {
@@ -202,6 +230,8 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                     fieldDateFrom.defaultValue = dateFrom;
                     fieldDateTo.defaultValue = dateTo;
                     fieldLote.defaultValue = lote;
+                    fieldYearCalculateCIF.defaultValue = year;
+                    fieldMonthCalculateCIF.defaultValue = month;
                     fieldCheckPaginate.defaultValue = checkPaginate;
 
                     // Obtener datos por search
@@ -211,6 +241,7 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                     let dataOT_RegistrosRelacionados = objSearch.getDataOT_RegistrosRelacionados(subsidiary, dataOTByFecha['data']);
                     let dataOT_EmisionesOrdenesProduccion = objSearch.getDataOT_EmisionesOrdenesProduccion(subsidiary, dataOT_RegistrosRelacionados['data'])
                     let dataOT_DatosProduccion = objSearch.getDataOT_DatosProduccion(subsidiary, dateFrom, dateTo, dataOT['data']);
+                    let dataReporteGastos_Cuentas6168 = objSearch.getDataReporteGastos_Cuentas6168(subsidiary, year, month);
                     let dataOT_Completo = objProcess.getDataOT_Completo(dataOT['data'], dataRevaluacion['data'], dataOT_RegistrosRelacionados['data'], dataOT_EmisionesOrdenesProduccion['data'], dataOT_DatosProduccion['data'], eliminar_datos = false);
 
                     // Performance
@@ -219,11 +250,14 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                     // objHelper.error_log('', dataOT_Completo);
 
                     // Procesar reporte
-                    dataOT_Completo = objProcessMe.getDataOT(dataOT_Completo);
+                    dataOT_Completo = objProcessMe.getDataOT(dataOT_Completo, dataReporteGastos_Cuentas6168['data'], { 'anio': year, 'mes': month });
                     let dataMD = objProcessMe.getDataMD(dataOT_Completo);
                     let dataMOD = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'mod');
                     let dataSRV = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'srv');
-                    let dataCIF = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'mod_srv');
+                    let dataCIF = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'mod_srv', { 'anio': year, 'mes': month });
+
+                    // Debug
+                    // objHelper.error_log('', dataOT_Completo);
 
                     // Validar cantidad de registros
                     let dataValidar = [dataMD, dataMOD, dataSRV, dataCIF];
@@ -238,6 +272,8 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                     fieldDateFrom.defaultValue = dateFrom;
                     fieldDateTo.defaultValue = dateTo;
                     fieldLote.defaultValue = lote;
+                    fieldYearCalculateCIF.defaultValue = year;
+                    fieldMonthCalculateCIF.defaultValue = month;
                     fieldCheckPaginate.defaultValue = checkPaginate;
 
                     // Obtener datos por search
@@ -247,24 +283,25 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                     let dataOT_RegistrosRelacionados = objSearch.getDataOT_RegistrosRelacionados(subsidiary, dataOTByFecha['data']);
                     let dataOT_EmisionesOrdenesProduccion = objSearch.getDataOT_EmisionesOrdenesProduccion(subsidiary, dataOT_RegistrosRelacionados['data'])
                     let dataOT_DatosProduccion = objSearch.getDataOT_DatosProduccion(subsidiary, dateFrom, dateTo, dataOT['data']);
+                    let dataReporteGastos_Cuentas6168 = objSearch.getDataReporteGastos_Cuentas6168(subsidiary, year, month);
                     let dataOT_Completo = objProcess.getDataOT_Completo(dataOT['data'], dataRevaluacion['data'], dataOT_RegistrosRelacionados['data'], dataOT_EmisionesOrdenesProduccion['data'], dataOT_DatosProduccion['data'], eliminar_datos = false);
 
                     // Procesar reporte
-                    dataOT_Completo = objProcessMe.getDataOT(dataOT_Completo);
+                    dataOT_Completo = objProcessMe.getDataOT(dataOT_Completo, dataReporteGastos_Cuentas6168['data'], { 'anio': year, 'mes': month });
                     let dataMD = objProcessMe.getDataMD(dataOT_Completo);
                     let dataMOD = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'mod');
                     let dataSRV = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'srv');
-                    let dataCIF = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'mod_srv');
+                    let dataCIF = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'mod_srv', { 'anio': year, 'mes': month });
 
                     // Crear csv
                     let titleDocument = 'Reporte Costo Real Estructurado';
                     let { csvFileMD } = objWidgetMe.createCSV_MD(dataMD, dateFrom, dateTo);
                     let { csvFileMOD } = objWidgetMe.createCSV_MOD(dataMOD, dateFrom, dateTo);
                     let { csvFileSRV } = objWidgetMe.createCSV_SRV(dataSRV, dateFrom, dateTo);
-                    // let { csvFileCIF } = objWidgetMe.createCSV_CID(dataCIF, dateFrom, dateTo);
+                    let { csvFileCIF } = objWidgetMe.createCSV_CIF(dataCIF, dateFrom, dateTo);
 
                     // Enviar email
-                    sendEmail(csvFileMD, csvFileMOD, csvFileSRV, titleDocument, form);
+                    sendEmail(csvFileMD, csvFileMOD, csvFileSRV, csvFileCIF, titleDocument, form);
                 }
 
                 // Renderizar formulario

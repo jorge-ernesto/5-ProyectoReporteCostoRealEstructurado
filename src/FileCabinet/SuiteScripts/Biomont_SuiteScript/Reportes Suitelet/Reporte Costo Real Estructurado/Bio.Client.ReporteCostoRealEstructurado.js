@@ -12,8 +12,30 @@ define(['N'],
         const scriptId = 'customscript_bio_sl_rep_cosreaest';
         const deployId = 'customdeploy_bio_sl_rep_cosreaest';
 
-        const scriptDownloadId = 'customscript_bio_sl_desexc_cosestrea';
-        const deployDownloadId = 'customdeploy_bio_sl_desexc_cosestrea';
+        const CONFIG_RECORD = {
+            fields_mandatory: {
+                subsidiary: {
+                    id: 'custpage_field_subsidiary',
+                    label: 'Subsidiaria'
+                },
+                start: {
+                    id: 'custpage_field_date_from',
+                    label: 'Fecha Desde'
+                },
+                end: {
+                    id: 'custpage_field_date_to',
+                    label: 'Fecha Hasta'
+                },
+                year: {
+                    id: 'custpage_field_year_calculate_cif',
+                    label: 'Año para el calculo del CIF'
+                },
+                month: {
+                    id: 'custpage_field_month_calculate_cif',
+                    label: 'Mes para el calculo del CIF'
+                }
+            }
+        }
 
         /******************/
 
@@ -36,6 +58,14 @@ define(['N'],
             //     boton2.classList.add('pgBntB');
             // }, 500);
 
+            let currentRecord = scriptContext.currentRecord;
+
+            // Hacer campos obligatorios
+            for (var key in CONFIG_RECORD.fields_mandatory) {
+                let nombre_campo = CONFIG_RECORD.fields_mandatory[key]['id']
+                currentRecord.getField(nombre_campo).isMandatory = true;
+            }
+
         }
 
         function consultar() {
@@ -45,11 +75,16 @@ define(['N'],
             // currentRecord.get(), recupera el mismo currentRecord que tiene cada funcion estandar
             let recordContext = currentRecord.get();
 
+            // Validar campos obligatorios
+            if (validarCampos(recordContext)) return;
+
             // Recuperar valores de los campos
             let subsidiary = recordContext.getValue('custpage_field_subsidiary')
             let start = recordContext.getText('custpage_field_date_from');
             let end = recordContext.getText('custpage_field_date_to');
             let lote = recordContext.getText('custpage_field_lote').trim();
+            let year = recordContext.getValue('custpage_field_year_calculate_cif');
+            let month = recordContext.getValue('custpage_field_month_calculate_cif');
             let paginate = recordContext.getText('custpage_field_check_paginate');
 
             // Obtener url del Suitelet mediante ID del Script y ID del Despliegue
@@ -62,6 +97,8 @@ define(['N'],
                     _start: start,
                     _end: end,
                     _lote: lote,
+                    _year: year,
+                    _month: month,
                     _paginate: paginate
                 }
             })
@@ -80,11 +117,16 @@ define(['N'],
             // currentRecord.get(), recupera el mismo currentRecord que tiene cada funcion estandar
             let recordContext = currentRecord.get();
 
+            // Validar campos obligatorios
+            if (validarCampos(recordContext)) return;
+
             // Recuperar valores de los campos
             let subsidiary = recordContext.getValue('custpage_field_subsidiary')
             let start = recordContext.getText('custpage_field_date_from');
             let end = recordContext.getText('custpage_field_date_to');
             let lote = recordContext.getText('custpage_field_lote').trim();
+            let year = recordContext.getValue('custpage_field_year_calculate_cif');
+            let month = recordContext.getValue('custpage_field_month_calculate_cif');
             let paginate = recordContext.getText('custpage_field_check_paginate');
 
             // Obtener url del Suitelet mediante ID del Script y ID del Despliegue
@@ -97,6 +139,8 @@ define(['N'],
                     _start: start,
                     _end: end,
                     _lote: lote,
+                    _year: year,
+                    _month: month,
                     _paginate: paginate
                 }
             })
@@ -106,6 +150,29 @@ define(['N'],
 
             // Redirigir a la url
             window.location.href = suitelet;
+        }
+
+        function validarCampos(recordContext) {
+
+            let mensaje = 'Introduzca valores para:';
+            let errores = {};
+
+            for (var key in CONFIG_RECORD.fields_mandatory) {
+                if (!recordContext.getValue(CONFIG_RECORD.fields_mandatory[key]['id'])) {
+                    errores[CONFIG_RECORD.fields_mandatory[key]['id']] = CONFIG_RECORD.fields_mandatory[key]['label'];
+                };
+            }
+
+            if (Object.keys(errores).length > 0) {
+                for (let error in errores) {
+                    mensaje += ` ${errores[error]},`
+                }
+                mensaje = mensaje.substring(0, mensaje.length - 1);
+                alert(mensaje);
+                return true;
+            }
+
+            return false;
         }
 
         return {
