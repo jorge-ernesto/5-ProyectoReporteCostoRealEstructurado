@@ -159,7 +159,7 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
         }
 
         // Enviar email
-        function sendEmail(csvFileMD, csvFileMOD, csvFileSRV, csvFileCIF, titleDocument, form) {
+        function sendEmail(csvFileMD, csvFileMOD, csvFileSRV, csvFileCIF, csvFileFactorCIF, titleDocument, form) {
             // Enviar email
             let { user } = objHelper.getUser();
 
@@ -168,7 +168,7 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                 recipients: user.id,
                 subject: `${titleDocument}`,
                 body: ' ',
-                attachments: [csvFileMD, csvFileMOD, csvFileSRV, csvFileCIF]
+                attachments: [csvFileMD, csvFileMOD, csvFileSRV, csvFileCIF, csvFileFactorCIF]
             });
 
             form.addPageInitMessage({
@@ -224,7 +224,8 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                 let month = scriptContext.request.parameters['_month'];
                 let checkPaginate = scriptContext.request.parameters['_paginate'];
 
-                if (button == 'consultar') {
+                if (button == 'consultar' || button == 'csv') {
+
                     // Setear datos al formulario
                     fieldSubsidiary.defaultValue = subsidiary;
                     fieldDateFrom.defaultValue = dateFrom;
@@ -241,7 +242,6 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                     let dataOT_RegistrosRelacionados = objSearch.getDataOT_RegistrosRelacionados(subsidiary, dataOTByFecha['data']);
                     let dataOT_EmisionesOrdenesProduccion = objSearch.getDataOT_EmisionesOrdenesProduccion(subsidiary, dataOT_RegistrosRelacionados['data'])
                     let dataOT_DatosProduccion = objSearch.getDataOT_DatosProduccion(subsidiary, dateFrom, dateTo, dataOT['data']);
-                    let dataReporteGastos_Cuentas6168 = objSearch.getDataReporteGastos_Cuentas6168(subsidiary, year, month);
                     let dataOT_Completo = objProcess.getDataOT_Completo(dataOT['data'], dataRevaluacion['data'], dataOT_RegistrosRelacionados['data'], dataOT_EmisionesOrdenesProduccion['data'], dataOT_DatosProduccion['data'], eliminar_datos = false);
 
                     // Performance
@@ -249,59 +249,58 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                     // Debug
                     // objHelper.error_log('', dataOT_Completo);
 
-                    // Procesar reporte
-                    dataOT_Completo = objProcessMe.getDataOT(dataOT_Completo, dataReporteGastos_Cuentas6168['data'], { 'anio': year, 'mes': month });
-                    let dataMD = objProcessMe.getDataMD(dataOT_Completo);
-                    let dataMOD = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'mod');
-                    let dataSRV = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'srv');
-                    let dataCIF = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'mod_srv', { 'anio': year, 'mes': month });
+                    // Obtener factor CIF por meses y asignarlos a las OTs
+                    let fechas = objHelper.getDatesByOT(dataOT_Completo);
+                    let dataFactorCIF = {};
+                    fechas.forEach(element => {
+                        let year = element.year;
+                        let month = element.month;
+
+                        let dataReporteGastos_Cuentas6168 = objSearch.getDataReporteGastos_Cuentas6168(subsidiary, year, month);
+                        dataFactorCIF[year] = dataFactorCIF[year] || {};
+                        dataFactorCIF[year][month] = objProcess.getFactorCIFbyMonth(dataOT_Completo, dataReporteGastos_Cuentas6168['data'], { 'anio': year, 'mes': month });
+                    });
+                    dataOT_Completo = objProcess.asignarFactorCIFByOTs(dataOT_Completo, dataFactorCIF);
+                    // Cerrar Obtener factor CIF por meses y asignarlos a las OTs
 
                     // Debug
+                    // objHelper.error_log('', fechas);
+                    // objHelper.error_log('', dataFactorCIF);
                     // objHelper.error_log('', dataOT_Completo);
-
-                    // Validar cantidad de registros
-                    let dataValidar = [dataMD, dataMOD, dataSRV, dataCIF];
-                    let recomendacion = 'CSV'
-                    if (validarCantidadRegistros(form, scriptContext, dataValidar, recomendacion) == true) return;
-
-                    // Crear sublista
-                    createSublist(form, dataMD, dataMOD, dataSRV, dataCIF, checkPaginate);
-                } else if (button == 'csv') {
-                    // Setear datos al formulario
-                    fieldSubsidiary.defaultValue = subsidiary;
-                    fieldDateFrom.defaultValue = dateFrom;
-                    fieldDateTo.defaultValue = dateTo;
-                    fieldLote.defaultValue = lote;
-                    fieldYearCalculateCIF.defaultValue = year;
-                    fieldMonthCalculateCIF.defaultValue = month;
-                    fieldCheckPaginate.defaultValue = checkPaginate;
-
-                    // Obtener datos por search
-                    let dataOTByFecha = objSearch.getDataOTByFecha(subsidiary, dateFrom, dateTo, lote);
-                    let dataOT = objSearch.getDataOTByLote(subsidiary, dataOTByFecha['data']);
-                    let dataRevaluacion = objSearch.getDataRevaluacion(subsidiary);
-                    let dataOT_RegistrosRelacionados = objSearch.getDataOT_RegistrosRelacionados(subsidiary, dataOTByFecha['data']);
-                    let dataOT_EmisionesOrdenesProduccion = objSearch.getDataOT_EmisionesOrdenesProduccion(subsidiary, dataOT_RegistrosRelacionados['data'])
-                    let dataOT_DatosProduccion = objSearch.getDataOT_DatosProduccion(subsidiary, dateFrom, dateTo, dataOT['data']);
-                    let dataReporteGastos_Cuentas6168 = objSearch.getDataReporteGastos_Cuentas6168(subsidiary, year, month);
-                    let dataOT_Completo = objProcess.getDataOT_Completo(dataOT['data'], dataRevaluacion['data'], dataOT_RegistrosRelacionados['data'], dataOT_EmisionesOrdenesProduccion['data'], dataOT_DatosProduccion['data'], eliminar_datos = false);
+                    // objHelper.error_log_by_lote('', dataOT_Completo, ['072823', '062333', '072953']);
 
                     // Procesar reporte
-                    dataOT_Completo = objProcessMe.getDataOT(dataOT_Completo, dataReporteGastos_Cuentas6168['data'], { 'anio': year, 'mes': month });
                     let dataMD = objProcessMe.getDataMD(dataOT_Completo);
                     let dataMOD = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'mod');
                     let dataSRV = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'srv');
-                    let dataCIF = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'mod_srv', { 'anio': year, 'mes': month });
+                    let dataCIF = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'mod_srv', { 'anio': year, 'mes': month, 'dataFactorCIF': dataFactorCIF[year][month] });
+                    let dataFactorCIF_Formateada = objProcessMe.getDataFactorCIF(dataFactorCIF);
 
-                    // Crear csv
-                    let titleDocument = 'Reporte Costo Real Estructurado';
-                    let { csvFileMD } = objWidgetMe.createCSV_MD(dataMD, dateFrom, dateTo);
-                    let { csvFileMOD } = objWidgetMe.createCSV_MOD(dataMOD, dateFrom, dateTo);
-                    let { csvFileSRV } = objWidgetMe.createCSV_SRV(dataSRV, dateFrom, dateTo);
-                    let { csvFileCIF } = objWidgetMe.createCSV_CIF(dataCIF, dateFrom, dateTo);
+                    // Debug
+                    // objHelper.error_log('', dataFactorCIF_Formateada);
 
-                    // Enviar email
-                    sendEmail(csvFileMD, csvFileMOD, csvFileSRV, csvFileCIF, titleDocument, form);
+                    if (button == 'consultar') {
+
+                        // Validar cantidad de registros
+                        let dataValidar = [dataMD, dataMOD, dataSRV, dataCIF];
+                        let recomendacion = 'CSV'
+                        if (validarCantidadRegistros(form, scriptContext, dataValidar, recomendacion) == true) return;
+
+                        // Crear sublista
+                        createSublist(form, dataMD, dataMOD, dataSRV, dataCIF, checkPaginate);
+                    } else if (button == 'csv') {
+
+                        // Crear csv
+                        let titleDocument = 'Reporte Costo Real Estructurado';
+                        let { csvFileMD } = objWidgetMe.createCSV_MD(dataMD, dateFrom, dateTo);
+                        let { csvFileMOD } = objWidgetMe.createCSV_MOD(dataMOD, dateFrom, dateTo);
+                        let { csvFileSRV } = objWidgetMe.createCSV_SRV(dataSRV, dateFrom, dateTo);
+                        let { csvFileCIF } = objWidgetMe.createCSV_CIF(dataCIF, dateFrom, dateTo, year, month);
+                        let { csvFileFactorCIF } = objWidgetMe.createCSV_FactorCIF(dataFactorCIF_Formateada, dateFrom, dateTo);
+
+                        // Enviar email
+                        sendEmail(csvFileMD, csvFileMOD, csvFileSRV, csvFileCIF, csvFileFactorCIF, titleDocument, form);
+                    }
                 }
 
                 // Renderizar formulario

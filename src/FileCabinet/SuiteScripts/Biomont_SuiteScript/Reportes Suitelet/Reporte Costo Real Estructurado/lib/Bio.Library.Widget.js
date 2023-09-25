@@ -597,7 +597,7 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             return { csvFileSRV, titleDocument }
         }
 
-        function createCSV_CIF(data, dateFrom, dateTo) {
+        function createCSV_CIF(data, dateFrom, dateTo, year, month) {
             // Nombre del archivo
             let typeRep = 'costoRealCIF';
             let titleDocument = 'Reporte Costo Real Estructurado';
@@ -628,24 +628,26 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             current.push('POL_2261');
             current.push('ACO_2271');
             current.push('TOT_GEN');
+
             // TOTAL DE IMPORTE BRUTO POR CENTRO DE COSTO
-            current.push('');
-            current.push('total_cc_iny');
-            current.push('total_cc_sem');
-            current.push('total_cc_liq');
-            current.push('total_cc_sot');
-            current.push('total_cc_sol');
-            current.push('total_cc_pol');
-            current.push('total_cc_aco');
+            // current.push('');
+            // current.push('total_cc_iny');
+            // current.push('total_cc_sem');
+            // current.push('total_cc_liq');
+            // current.push('total_cc_sot');
+            // current.push('total_cc_sol');
+            // current.push('total_cc_pol');
+            // current.push('total_cc_aco');
+
             // TOTAL DE HORAS DE CIF POR LINEA
-            current.push('');
-            current.push('total_hr_iny');
-            current.push('total_hr_sem');
-            current.push('total_hr_liq');
-            current.push('total_hr_sot');
-            current.push('total_hr_sol');
-            current.push('total_hr_pol');
-            current.push('total_hr_aco');
+            // current.push('');
+            // current.push('total_hr_iny');
+            // current.push('total_hr_sem');
+            // current.push('total_hr_liq');
+            // current.push('total_hr_sot');
+            // current.push('total_hr_sol');
+            // current.push('total_hr_pol');
+            // current.push('total_hr_aco');
 
             current = current.join(';');
             csvData.push(current);
@@ -674,38 +676,91 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
                 current.push(element.total_pol);
                 current.push(element.total_aco);
                 current.push(element.total_gen);
+
                 // TOTAL DE IMPORTE BRUTO POR CENTRO DE COSTO
-                current.push('');
-                current.push(element.total_cc_iny);
-                current.push(element.total_cc_sem);
-                current.push(element.total_cc_liq);
-                current.push(element.total_cc_sot);
-                current.push(element.total_cc_sol);
-                current.push(element.total_cc_pol);
-                current.push(element.total_cc_aco);
+                // current.push('');
+                // current.push(element.total_cc_iny);
+                // current.push(element.total_cc_sem);
+                // current.push(element.total_cc_liq);
+                // current.push(element.total_cc_sot);
+                // current.push(element.total_cc_sol);
+                // current.push(element.total_cc_pol);
+                // current.push(element.total_cc_aco);
+
                 // TOTAL DE HORAS DE CIF POR LINEA
-                current.push('');
-                current.push(element.total_hr_iny);
-                current.push(element.total_hr_sem);
-                current.push(element.total_hr_liq);
-                current.push(element.total_hr_sot);
-                current.push(element.total_hr_sol);
-                current.push(element.total_hr_pol);
-                current.push(element.total_hr_aco);
+                // current.push('');
+                // current.push(element.total_hr_iny);
+                // current.push(element.total_hr_sem);
+                // current.push(element.total_hr_liq);
+                // current.push(element.total_hr_sot);
+                // current.push(element.total_hr_sol);
+                // current.push(element.total_hr_pol);
+                // current.push(element.total_hr_aco);
 
                 current = current.join(';');
                 csvData.push(current);
             });
             csvData = csvData.join("\r\n");
 
+            let meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
             let csvFileCIF = file.create({
-                name: `biomont_${typeRep}_${dateFrom}_${dateTo}.csv`,
+                name: `biomont_${typeRep}_${dateFrom}_${dateTo}_CIF${year}${meses[month]}.csv`,
                 fileType: file.Type.CSV,
                 contents: csvData,
                 encoding: file.Encoding.UTF_8,
             });
 
             return { csvFileCIF, titleDocument }
+        }
+
+        function createCSV_FactorCIF(data, dateFrom, dateTo) {
+            // Nombre del archivo
+            let typeRep = 'factorCIF';
+            let titleDocument = 'Reporte Costo Real Estructurado';
+
+            // Crear CSV
+            let csvData = [];
+
+            // Setear cabecera de csv
+            let current = [];
+            current.push('');
+            current.push('INY_2211');
+            current.push('SEM_2221');
+            current.push('LIQ_2231');
+            current.push('SOT_2241');
+            current.push('SOL_2251');
+            current.push('POL_2261');
+            current.push('ACO_2271');
+
+            current = current.join(';');
+            csvData.push(current);
+
+            // Setear contenido de csv
+            data.forEach((element, i) => {
+                let current = [];
+                current.push(element.label);
+                current.push(element.total_iny);
+                current.push(element.total_sem);
+                current.push(element.total_liq);
+                current.push(element.total_sot);
+                current.push(element.total_sol);
+                current.push(element.total_pol);
+                current.push(element.total_aco);
+
+                current = current.join(';');
+                csvData.push(current);
+            });
+            csvData = csvData.join("\r\n");
+
+            let csvFileFactorCIF = file.create({
+                name: `biomont_${typeRep}_${dateFrom}_${dateTo}.csv`,
+                fileType: file.Type.CSV,
+                contents: csvData,
+                encoding: file.Encoding.UTF_8,
+            });
+
+            return { csvFileFactorCIF, titleDocument }
         }
 
         return {
@@ -716,7 +771,8 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             createCSV_MD,
             createCSV_MOD,
             createCSV_SRV,
-            createCSV_CIF
+            createCSV_CIF,
+            createCSV_FactorCIF
         }
 
     });

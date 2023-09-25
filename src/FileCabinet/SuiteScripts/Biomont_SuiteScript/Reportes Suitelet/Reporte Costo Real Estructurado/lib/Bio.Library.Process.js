@@ -6,240 +6,6 @@ define(['N'],
 
     function (N) {
 
-        function getDataOT(dataReporte, dataReporteGastos_Cuentas6168, parameters = {}) {
-
-            // RECORRER ORDENES DE TRABAJO PARA AGREGAR -- LINEA DE ORDEN DE TRABAJO (TIPO DE ORDEN DE TRABAJO: ENVASADO Y EMPACADO)
-            let dataReporte_ = dataReporte;
-            dataReporte.forEach((value_rep, key_rep) => {
-                if (value_rep.tipo_orden_trabajo == '1' || value_rep.tipo_orden_trabajo_nombre == 'FABRICACIÓN') {
-
-                    dataReporte_.forEach((value_rep_, key_rep_) => {
-                        if (value_rep.lote == value_rep_.lote && (value_rep_.tipo_orden_trabajo == '3' || value_rep_.tipo_orden_trabajo_nombre == 'ENVASADO Y EMPACADO')) {
-
-                            dataReporte[key_rep]['linea_ot_envasado_empacado'] = value_rep_.linea;
-                            dataReporte[key_rep]['linea_nombre_ot_envasado_empacado'] = value_rep_.linea_nombre;
-                        }
-                    });
-                } else if (value_rep.tipo_orden_trabajo == '3' || value_rep.tipo_orden_trabajo_nombre == 'ENVASADO Y EMPACADO') {
-
-                    dataReporte[key_rep]['linea_ot_envasado_empacado'] = value_rep.linea;
-                    dataReporte[key_rep]['linea_nombre_ot_envasado_empacado'] = value_rep.linea_nombre;
-
-                    // VALIDACION ADICIONAL POR EL CASO DE LA OT: 002285 CON LOTE: 083153
-                    if (value_rep.linea == '6' || value_rep.linea_nombre == 'BULK Y PRODUCTOS INTERMEDIOS') {
-
-                        dataReporte_.forEach((value_rep_, key_rep_) => {
-                            if (value_rep.lote == value_rep_.lote && !(value_rep_.linea == '6' || value_rep_.linea_nombre == 'BULK Y PRODUCTOS INTERMEDIOS')) {
-
-                                dataReporte[key_rep]['linea_ot_envasado_empacado'] = value_rep_.linea;
-                                dataReporte[key_rep]['linea_nombre_ot_envasado_empacado'] = value_rep_.linea_nombre;
-                            }
-                        });
-                    }
-                }
-            });
-
-            /******************************************************/
-
-            // RECORRER ORDENES DE TRABAJARO PARA OBTENER:
-            let total_hr_iny = 0;
-            let total_hr_sem = 0;
-            let total_hr_liq = 0;
-            let total_hr_sot = 0;
-            let total_hr_sol = 0;
-            let total_hr_pol = 0;
-            let total_hr_aco = 0;
-
-            dataReporte.forEach((value_rep, key_rep) => {
-
-                let datos_de_produccion = value_rep.datos_de_produccion || [];
-                datos_de_produccion.forEach((value_prod, key_prod) => {
-
-                    // Obtener informacion
-                    // Orden de Trabajo
-                    let lin_id = value_rep.linea_ot_envasado_empacado;
-                    let lin = value_rep.linea_nombre_ot_envasado_empacado;
-                    // Datos de Produccion
-                    let horas = value_prod.duracion_horas;
-                    let fec_cierre = value_prod.fecha;
-                    let anio = fec_cierre.split('/')[2];
-                    let mes = fec_cierre.split('/')[1];
-                    let estado = value_rep.estado;
-
-                    // Filtrar datos para el CIF
-                    if (Object.keys(parameters).length > 0) {
-
-                        // Filtrar por Fecha de Cierre y Estado
-                        // En JavaScript, los meses se representan con valores enteros del 0 al 11, donde 0 es enero y 11 es diciembre.
-                        if (Number(anio) == Number(parameters.anio) && Number(mes) == Number(parameters.mes) + 1 && ['Cerrada', 'Closed', 'En curso', 'In Process'].includes(estado)) {
-
-                            // Filtrar por Linea
-                            if (['1', '9', '3', '10', '11', '2'].includes(lin_id) || ['INYECTABLES', 'SEMISOLIDOS', 'LIQUIDOS', 'SOLUCIONES TOPICAS', 'SOLIDOS', 'POLVOS'].includes(lin)) {
-
-                                if (lin == 'INYECTABLES') {
-                                    total_hr_iny += parseFloat(horas);
-                                } else if (lin == 'SEMISOLIDOS') {
-                                    total_hr_sem += parseFloat(horas);
-                                } else if (lin == 'LIQUIDOS') {
-                                    total_hr_liq += parseFloat(horas);
-                                } else if (lin == 'SOLUCIONES TOPICAS') {
-                                    total_hr_sot += parseFloat(horas);
-                                } else if (lin == 'SOLIDOS') {
-                                    total_hr_sol += parseFloat(horas);
-                                } else if (lin == 'POLVOS') {
-                                    total_hr_pol += parseFloat(horas);
-                                }
-                                total_hr_aco += parseFloat(horas);
-                            }
-                        }
-                    }
-                });
-            });
-
-            // TOTAL DE HORAS DE CIF POR LINEA
-            dataReporte.forEach((value_rep, key_rep) => {
-
-                dataReporte[key_rep]['total_hr_iny'] = 0;
-                dataReporte[key_rep]['total_hr_sem'] = 0;
-                dataReporte[key_rep]['total_hr_liq'] = 0;
-                dataReporte[key_rep]['total_hr_sot'] = 0;
-                dataReporte[key_rep]['total_hr_sol'] = 0;
-                dataReporte[key_rep]['total_hr_pol'] = 0;
-                dataReporte[key_rep]['total_hr_aco'] = 0;
-
-                let lin_id = value_rep.linea_ot_envasado_empacado;
-                let lin = value_rep.linea_nombre_ot_envasado_empacado;
-
-                if (lin_id == '1' || lin == 'INYECTABLES') {
-
-                    dataReporte[key_rep]['total_hr_iny'] = total_hr_iny;
-                } else if (lin_id == '9' || lin == 'SEMISOLIDOS') {
-
-                    dataReporte[key_rep]['total_hr_sem'] = total_hr_sem;
-                } else if (lin_id == '3' || lin == 'LIQUIDOS') {
-
-                    dataReporte[key_rep]['total_hr_liq'] = total_hr_liq;
-                } else if (lin_id == '10' || lin == 'SOLUCIONES TOPICAS') {
-
-                    dataReporte[key_rep]['total_hr_sot'] = total_hr_sot;
-                } else if (lin_id == '11' || lin == 'SOLIDOS') {
-
-                    dataReporte[key_rep]['total_hr_sol'] = total_hr_sol;
-                } else if (lin_id == '2' || lin == 'POLVOS') {
-
-                    dataReporte[key_rep]['total_hr_pol'] = total_hr_pol;
-                }
-
-                // ACONDICIONADO
-                dataReporte[key_rep]['total_hr_aco'] = total_hr_aco;
-            });
-
-            /******************************************************/
-
-            // RECORRER REPORTE DE GASTOS PARA OBTENER:
-            let total_cc_iny = 0;
-            let total_cc_sem = 0;
-            let total_cc_liq = 0;
-            let total_cc_sot = 0;
-            let total_cc_sol = 0;
-            let total_cc_pol = 0;
-            let total_cc_aco = 0;
-
-            dataReporteGastos_Cuentas6168.forEach((value_rep, key_rep) => {
-
-                let cuenta_numero = value_rep.cuenta_numero;
-                let importe_bruto = value_rep.importe_bruto;
-                let centro_costo = value_rep.centro_costo;
-                let centro_costo_nombre = value_rep.centro_costo_nombre;
-                let centro_costo_array = ['8', '9', '10', '11', '12', '32', '13'];
-                let centro_costo_nombre_array = ['PRODUCCIÓN : 2211 INYECTABLES', 'PRODUCCIÓN : 2221 SEMISOLIDOS', 'PRODUCCIÓN : 2231 LIQUIDOS', 'PRODUCCIÓN : 2241 SOLUCIONES TOPICAS', 'PRODUCCIÓN : 2251 SOLIDOS', 'PRODUCCIÓN : 2261 POLVOS', 'PRODUCCIÓN : 2271 ACONDICIONADO'];
-
-                // Centros de costos: 2211, 2221, 2231, 2241, 2251, 2261, 2271
-                if (centro_costo_array.includes(centro_costo) || centro_costo_nombre_array.includes(centro_costo_nombre)) {
-
-                    // Eliminar todas las cuentas que comienzan con 62, excepto 62131113
-                    if (cuenta_numero.substring(0, 2) != '62' || cuenta_numero == '62131113') {
-
-                        // Eliminar toda la cuenta 63311115
-                        if (cuenta_numero != '63311115') {
-
-                            if (centro_costo == '8' || centro_costo_nombre == 'PRODUCCIÓN : 2211 INYECTABLES') {
-                                total_cc_iny += parseFloat(importe_bruto);
-                            } else if (centro_costo == '9' || centro_costo_nombre == 'PRODUCCIÓN : 2221 SEMISOLIDOS') {
-                                total_cc_sem += parseFloat(importe_bruto);
-                            } else if (centro_costo == '10' || centro_costo_nombre == 'PRODUCCIÓN : 2231 LIQUIDOS') {
-                                total_cc_liq += parseFloat(importe_bruto);
-                            } else if (centro_costo == '11' || centro_costo_nombre == 'PRODUCCIÓN : 2241 SOLUCIONES TOPICAS') {
-                                total_cc_sot += parseFloat(importe_bruto);
-                            } else if (centro_costo == '12' || centro_costo_nombre == 'PRODUCCIÓN : 2251 SOLIDOS') {
-                                total_cc_sol += parseFloat(importe_bruto);
-                            } else if (centro_costo == '32' || centro_costo_nombre == 'PRODUCCIÓN : 2261 POLVOS') {
-                                total_cc_pol += parseFloat(importe_bruto);
-                            } else if (centro_costo == '13' || centro_costo_nombre == 'PRODUCCIÓN : 2271 ACONDICIONADO') {
-                                total_cc_aco += parseFloat(importe_bruto);
-                            }
-                        }
-                    }
-                }
-            });
-
-            // TOTAL DE IMPORTE BRUTO POR CENTRO DE COSTO
-            // FACTOR CIF POR LINEA / CENTRO DE COSTO
-            dataReporte.forEach((value_rep, key_rep) => {
-
-                dataReporte[key_rep]['total_cc_iny'] = 0;
-                dataReporte[key_rep]['total_cc_sem'] = 0;
-                dataReporte[key_rep]['total_cc_liq'] = 0;
-                dataReporte[key_rep]['total_cc_sot'] = 0;
-                dataReporte[key_rep]['total_cc_sol'] = 0;
-                dataReporte[key_rep]['total_cc_pol'] = 0;
-                dataReporte[key_rep]['total_cc_aco'] = 0;
-
-                dataReporte[key_rep]['factor_cif_iny'] = 0;
-                dataReporte[key_rep]['factor_cif_sem'] = 0;
-                dataReporte[key_rep]['factor_cif_liq'] = 0;
-                dataReporte[key_rep]['factor_cif_sot'] = 0;
-                dataReporte[key_rep]['factor_cif_sol'] = 0;
-                dataReporte[key_rep]['factor_cif_pol'] = 0;
-                dataReporte[key_rep]['factor_cif_aco'] = 0;
-
-                let lin_id = value_rep.linea_ot_envasado_empacado;
-                let lin = value_rep.linea_nombre_ot_envasado_empacado;
-
-                if (lin_id == '1' || lin == 'INYECTABLES') {
-
-                    dataReporte[key_rep]['total_cc_iny'] = total_cc_iny;
-                    dataReporte[key_rep]['factor_cif_iny'] = value_rep.total_hr_iny == 0 ? 0 : total_cc_iny / value_rep.total_hr_iny;
-                } else if (lin_id == '9' || lin == 'SEMISOLIDOS') {
-
-                    dataReporte[key_rep]['total_cc_sem'] = total_cc_sem;
-                    dataReporte[key_rep]['factor_cif_sem'] = value_rep.total_hr_sem == 0 ? 0 : total_cc_sem / value_rep.total_hr_sem;
-                } else if (lin_id == '3' || lin == 'LIQUIDOS') {
-
-                    dataReporte[key_rep]['total_cc_liq'] = total_cc_liq;
-                    dataReporte[key_rep]['factor_cif_liq'] = value_rep.total_hr_liq == 0 ? 0 : total_cc_liq / value_rep.total_hr_liq;
-                } else if (lin_id == '10' || lin == 'SOLUCIONES TOPICAS') {
-
-                    dataReporte[key_rep]['total_cc_sot'] = total_cc_sot;
-                    dataReporte[key_rep]['factor_cif_sot'] = value_rep.total_hr_sot == 0 ? 0 : total_cc_sot / value_rep.total_hr_sot;
-                } else if (lin_id == '11' || lin == 'SOLIDOS') {
-
-                    dataReporte[key_rep]['total_cc_sol'] = total_cc_sol;
-                    dataReporte[key_rep]['factor_cif_sol'] = value_rep.total_hr_sol == 0 ? 0 : total_cc_sol / value_rep.total_hr_sol;
-                } else if (lin_id == '2' || lin == 'POLVOS') {
-
-                    dataReporte[key_rep]['total_cc_pol'] = total_cc_pol;
-                    dataReporte[key_rep]['factor_cif_pol'] = value_rep.total_hr_pol == 0 ? 0 : total_cc_pol / value_rep.total_hr_pol;
-                }
-
-                // ACONDICIONADO
-                dataReporte[key_rep]['total_cc_aco'] = total_cc_aco;
-                dataReporte[key_rep]['factor_cif_aco'] = value_rep.total_hr_aco == 0 ? 0 : total_cc_aco / value_rep.total_hr_aco;
-            });
-
-            return dataReporte;
-        }
-
         function getDataMD(dataReporte) {
 
             // Declarar variables
@@ -319,6 +85,7 @@ define(['N'],
             let fDecimal = 6;
 
             // Declarar variables
+            let data = [];
             let data_mod = [];
             let data_srv = [];
             let data_mod_srv = [];
@@ -352,30 +119,32 @@ define(['N'],
                     let soles_x_hr = value_prod.costo_hora;
                     let total_soles = value_prod.costo_total;
                     // Datos CIF
-                    let total_iny = parseFloat(value_prod.duracion_horas) * parseFloat(value_rep.factor_cif_iny);
-                    let total_sem = parseFloat(value_prod.duracion_horas) * parseFloat(value_rep.factor_cif_sem);
-                    let total_liq = parseFloat(value_prod.duracion_horas) * parseFloat(value_rep.factor_cif_liq);
-                    let total_sot = parseFloat(value_prod.duracion_horas) * parseFloat(value_rep.factor_cif_sot);
-                    let total_sol = parseFloat(value_prod.duracion_horas) * parseFloat(value_rep.factor_cif_sol);
-                    let total_pol = parseFloat(value_prod.duracion_horas) * parseFloat(value_rep.factor_cif_pol);
-                    let total_aco = parseFloat(value_prod.duracion_horas) * parseFloat(value_rep.factor_cif_aco);
-                    let total_gen = total_iny + total_sem + total_liq + total_sot + total_sol + total_pol + total_aco;
+                    let total_iny = value_prod.total_iny;
+                    let total_sem = value_prod.total_sem;
+                    let total_liq = value_prod.total_liq;
+                    let total_sot = value_prod.total_sot;
+                    let total_sol = value_prod.total_sol;
+                    let total_pol = value_prod.total_pol;
+                    let total_aco = value_prod.total_aco;
+                    let total_gen = value_prod.total_gen;
+
                     // TOTAL DE IMPORTE BRUTO POR CENTRO DE COSTO
-                    let total_cc_iny = value_rep.total_cc_iny;
-                    let total_cc_sem = value_rep.total_cc_sem;
-                    let total_cc_liq = value_rep.total_cc_liq;
-                    let total_cc_sot = value_rep.total_cc_sot;
-                    let total_cc_sol = value_rep.total_cc_sol;
-                    let total_cc_pol = value_rep.total_cc_pol;
-                    let total_cc_aco = value_rep.total_cc_aco;
+                    // let total_cc_iny = value_rep.total_cc_iny;
+                    // let total_cc_sem = value_rep.total_cc_sem;
+                    // let total_cc_liq = value_rep.total_cc_liq;
+                    // let total_cc_sot = value_rep.total_cc_sot;
+                    // let total_cc_sol = value_rep.total_cc_sol;
+                    // let total_cc_pol = value_rep.total_cc_pol;
+                    // let total_cc_aco = value_rep.total_cc_aco;
+
                     // TOTAL DE HORAS DE CIF POR LINEA
-                    let total_hr_iny = value_rep.total_hr_iny;
-                    let total_hr_sem = value_rep.total_hr_sem;
-                    let total_hr_liq = value_rep.total_hr_liq;
-                    let total_hr_sot = value_rep.total_hr_sot;
-                    let total_hr_sol = value_rep.total_hr_sol;
-                    let total_hr_pol = value_rep.total_hr_pol;
-                    let total_hr_aco = value_rep.total_hr_aco;
+                    // let total_hr_iny = value_rep.total_hr_iny;
+                    // let total_hr_sem = value_rep.total_hr_sem;
+                    // let total_hr_liq = value_rep.total_hr_liq;
+                    // let total_hr_sot = value_rep.total_hr_sot;
+                    // let total_hr_sol = value_rep.total_hr_sol;
+                    // let total_hr_pol = value_rep.total_hr_pol;
+                    // let total_hr_aco = value_rep.total_hr_aco;
 
                     // Procesar reporte
                     rend = isNaN(rend) ? '' : `${Math.round10(rend, -2).toFixed(2)}%`;
@@ -420,22 +189,24 @@ define(['N'],
                         total_pol: total_pol,
                         total_aco: total_aco,
                         total_gen: total_gen,
+
                         // TOTAL DE IMPORTE BRUTO POR CENTRO DE COSTO
-                        total_cc_iny: total_cc_iny,
-                        total_cc_sem: total_cc_sem,
-                        total_cc_liq: total_cc_liq,
-                        total_cc_sot: total_cc_sot,
-                        total_cc_sol: total_cc_sol,
-                        total_cc_pol: total_cc_pol,
-                        total_cc_aco: total_cc_aco,
+                        // total_cc_iny: total_cc_iny,
+                        // total_cc_sem: total_cc_sem,
+                        // total_cc_liq: total_cc_liq,
+                        // total_cc_sot: total_cc_sot,
+                        // total_cc_sol: total_cc_sol,
+                        // total_cc_pol: total_cc_pol,
+                        // total_cc_aco: total_cc_aco,
+
                         // TOTAL DE HORAS DE CIF POR LINEA
-                        total_hr_iny: total_hr_iny,
-                        total_hr_sem: total_hr_sem,
-                        total_hr_liq: total_hr_liq,
-                        total_hr_sot: total_hr_sot,
-                        total_hr_sol: total_hr_sol,
-                        total_hr_pol: total_hr_pol,
-                        total_hr_aco: total_hr_aco,
+                        // total_hr_iny: total_hr_iny,
+                        // total_hr_sem: total_hr_sem,
+                        // total_hr_liq: total_hr_liq,
+                        // total_hr_sot: total_hr_sot,
+                        // total_hr_sol: total_hr_sol,
+                        // total_hr_pol: total_hr_pol,
+                        // total_hr_aco: total_hr_aco,
                     }
 
                     if (!(value_prod.empleado == '22099' || value_prod.empleado_nombre == 'PERSONAL TERCERO')) {
@@ -447,7 +218,7 @@ define(['N'],
                         data_srv.push(json);
                     }
 
-                    // Filtrar datos para el CIF
+                    // Validar parametros para filtrar datos para obtener el factor del CIF por meses
                     if (Object.keys(parameters).length > 0) {
 
                         // Filtrar por Fecha de Cierre y Estado
@@ -467,14 +238,160 @@ define(['N'],
 
             // Retornar informacion
             if (type == 'mod') {
-                return data_mod;
+                data = data_mod;
             } else if (type == 'srv') {
-                return data_srv;
+                data = data_srv;
             } else if (type == 'mod_srv') {
-                return data_mod_srv;
+                data = data_mod_srv;
             }
+
+            // Agregar totales CIF
+            if (Object.keys(parameters).length > 0) {
+                let dataFactorCIF = parameters.dataFactorCIF;
+                data = addTotalesCIF(data, dataFactorCIF);
+            }
+
+            return data;
         }
 
-        return { getDataOT, getDataMD, getDataMOD_SRV }
+        function addTotalesCIF(data, dataFactorCIF) {
+
+            let json = {};
+
+            // LINEA VACIA
+            json = {};
+            data.push(json);
+
+            // TOTAL DE IMPORTE BRUTO POR CENTRO DE COSTO
+            json = {
+                estado: 'TOTAL CC',
+                total_iny: dataFactorCIF['total_cc_iny'],
+                total_sem: dataFactorCIF['total_cc_sem'],
+                total_liq: dataFactorCIF['total_cc_liq'],
+                total_sot: dataFactorCIF['total_cc_sot'],
+                total_sol: dataFactorCIF['total_cc_sol'],
+                total_pol: dataFactorCIF['total_cc_pol'],
+                total_aco: dataFactorCIF['total_cc_aco'],
+            }
+            data.push(json);
+
+            // TOTAL DE HORAS DE CIF POR LINEA
+            json = {
+                estado: 'TOTAL HRS LIN',
+                total_iny: dataFactorCIF['total_hr_iny'],
+                total_sem: dataFactorCIF['total_hr_sem'],
+                total_liq: dataFactorCIF['total_hr_liq'],
+                total_sot: dataFactorCIF['total_hr_sot'],
+                total_sol: dataFactorCIF['total_hr_sol'],
+                total_pol: dataFactorCIF['total_hr_pol'],
+                total_aco: dataFactorCIF['total_hr_aco'],
+            }
+            data.push(json);
+
+            // FACTOR CIF POR LINEA / CENTRO DE COSTO
+            json = {
+                estado: 'FACTOR',
+                total_iny: dataFactorCIF['factor_cif_iny'],
+                total_sem: dataFactorCIF['factor_cif_sem'],
+                total_liq: dataFactorCIF['factor_cif_liq'],
+                total_sot: dataFactorCIF['factor_cif_sot'],
+                total_sol: dataFactorCIF['factor_cif_sol'],
+                total_pol: dataFactorCIF['factor_cif_pol'],
+                total_aco: dataFactorCIF['factor_cif_aco'],
+            }
+            data.push(json);
+
+            return data;
+        }
+
+        function getDataFactorCIF(dataFactorCIF) {
+
+            let data = [];
+            let json = {};
+            let meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+            // LINEAS POR MESES
+            for (var key in dataFactorCIF) {
+
+                // console.log(dataFactorCIF[key]);
+                let anio = key;
+                let dataMonth = dataFactorCIF[key];
+
+                for (var key in dataMonth) {
+
+                    // console.log(dataMonth[key]);
+                    let value = dataMonth[key];
+
+                    // LINEA VACIA
+                    json = {
+                        label: '',
+                        total_iny: '',
+                        total_sem: '',
+                        total_liq: '',
+                        total_sot: '',
+                        total_sol: '',
+                        total_pol: '',
+                        total_aco: '',
+                    }
+                    data.push(json);
+
+                    // AÑO Y MES
+                    json = {
+                        label: `${anio} - ${meses[key]}`,
+                        total_iny: '',
+                        total_sem: '',
+                        total_liq: '',
+                        total_sot: '',
+                        total_sol: '',
+                        total_pol: '',
+                        total_aco: '',
+                    }
+                    data.push(json);
+
+                    // TOTAL DE IMPORTE BRUTO POR CENTRO DE COSTO
+                    json = {
+                        label: 'TOTAL CC',
+                        total_iny: value.total_cc_iny,
+                        total_sem: value.total_cc_sem,
+                        total_liq: value.total_cc_liq,
+                        total_sot: value.total_cc_sot,
+                        total_sol: value.total_cc_sol,
+                        total_pol: value.total_cc_pol,
+                        total_aco: value.total_cc_aco,
+                    }
+                    data.push(json);
+
+                    // TOTAL DE HORAS DE CIF POR LINEA
+                    json = {
+                        label: 'TOTAL HRS LIN',
+                        total_iny: value.total_hr_iny,
+                        total_sem: value.total_hr_sem,
+                        total_liq: value.total_hr_liq,
+                        total_sot: value.total_hr_sot,
+                        total_sol: value.total_hr_sol,
+                        total_pol: value.total_hr_pol,
+                        total_aco: value.total_hr_aco,
+                    }
+                    data.push(json);
+
+                    // FACTOR CIF POR LINEA / CENTRO DE COSTO
+                    json = {
+                        label: 'FACTOR',
+                        total_iny: value.factor_cif_iny,
+                        total_sem: value.factor_cif_sem,
+                        total_liq: value.factor_cif_liq,
+                        total_sot: value.factor_cif_sot,
+                        total_sol: value.factor_cif_sol,
+                        total_pol: value.factor_cif_pol,
+                        total_aco: value.factor_cif_aco,
+                    }
+                    data.push(json);
+                }
+            }
+
+            return data;
+        }
+
+        return { getDataMD, getDataMOD_SRV, getDataFactorCIF }
 
     });
