@@ -39,56 +39,58 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             sublist.addField({ id: 'custpage_fec_doc', type: serverWidget.FieldType.TEXT, label: 'fec_doc' });
 
             // Setear los datos obtenidos a sublista
-            data.forEach((element, i) => {
-                if (element.nro_ord) {
-                    sublist.setSublistValue({ id: 'custpage_nro_ord', line: i, value: element.nro_ord });
-                }
-                if (element.lote) {
-                    sublist.setSublistValue({ id: 'custpage_lote', line: i, value: element.lote });
-                }
-                if (element.fec_ord) {
-                    sublist.setSublistValue({ id: 'custpage_fec_ord', line: i, value: element.fec_ord });
-                }
-                if (element.cant_teor) {
-                    sublist.setSublistValue({ id: 'custpage_cant_teor', line: i, value: element.cant_teor });
-                }
-                if (element.cant_real) {
-                    sublist.setSublistValue({ id: 'custpage_cant_real', line: i, value: element.cant_real });
-                }
-                if (element.rend) {
-                    sublist.setSublistValue({ id: 'custpage_rend', line: i, value: element.rend });
-                }
-                if (element.codigo) {
-                    sublist.setSublistValue({ id: 'custpage_codigo', line: i, value: element.codigo });
-                }
-                if (element.producto) {
-                    sublist.setSublistValue({ id: 'custpage_producto', line: i, value: element.producto });
-                }
-                if (element.lin_mat) {
-                    sublist.setSublistValue({ id: 'custpage_lin_mat', line: i, value: element.lin_mat });
-                }
-                if (element.cod_mat) {
-                    sublist.setSublistValue({ id: 'custpage_cod_mat', line: i, value: element.cod_mat });
-                }
-                if (element.des_mat) {
-                    sublist.setSublistValue({ id: 'custpage_des_mat', line: i, value: element.des_mat });
-                }
-                if (element.cantidad) {
-                    sublist.setSublistValue({ id: 'custpage_cantidad', line: i, value: element.cantidad });
-                }
-                if (element.costo) {
-                    sublist.setSublistValue({ id: 'custpage_costo', line: i, value: element.costo });
-                }
-                if (element.fec_cierre) {
-                    sublist.setSublistValue({ id: 'custpage_fec_cierre', line: i, value: element.fec_cierre });
-                }
-                if (element.estado) {
-                    sublist.setSublistValue({ id: 'custpage_estado', line: i, value: element.estado });
-                }
-                if (element.fec_doc) {
-                    sublist.setSublistValue({ id: 'custpage_fec_doc', line: i, value: element.fec_doc });
-                }
-            });
+            if (Object.keys(data).length > 0) {
+                data.forEach((element, i) => {
+                    if (element.nro_ord) {
+                        sublist.setSublistValue({ id: 'custpage_nro_ord', line: i, value: element.nro_ord });
+                    }
+                    if (element.lote) {
+                        sublist.setSublistValue({ id: 'custpage_lote', line: i, value: element.lote });
+                    }
+                    if (element.fec_ord) {
+                        sublist.setSublistValue({ id: 'custpage_fec_ord', line: i, value: element.fec_ord });
+                    }
+                    if (element.cant_teor) {
+                        sublist.setSublistValue({ id: 'custpage_cant_teor', line: i, value: element.cant_teor });
+                    }
+                    if (element.cant_real) {
+                        sublist.setSublistValue({ id: 'custpage_cant_real', line: i, value: element.cant_real });
+                    }
+                    if (element.rend) {
+                        sublist.setSublistValue({ id: 'custpage_rend', line: i, value: element.rend });
+                    }
+                    if (element.codigo) {
+                        sublist.setSublistValue({ id: 'custpage_codigo', line: i, value: element.codigo });
+                    }
+                    if (element.producto) {
+                        sublist.setSublistValue({ id: 'custpage_producto', line: i, value: element.producto });
+                    }
+                    if (element.lin_mat) {
+                        sublist.setSublistValue({ id: 'custpage_lin_mat', line: i, value: element.lin_mat });
+                    }
+                    if (element.cod_mat) {
+                        sublist.setSublistValue({ id: 'custpage_cod_mat', line: i, value: element.cod_mat });
+                    }
+                    if (element.des_mat) {
+                        sublist.setSublistValue({ id: 'custpage_des_mat', line: i, value: element.des_mat });
+                    }
+                    if (element.cantidad) {
+                        sublist.setSublistValue({ id: 'custpage_cantidad', line: i, value: element.cantidad });
+                    }
+                    if (element.costo) {
+                        sublist.setSublistValue({ id: 'custpage_costo', line: i, value: element.costo });
+                    }
+                    if (element.fec_cierre) {
+                        sublist.setSublistValue({ id: 'custpage_fec_cierre', line: i, value: element.fec_cierre });
+                    }
+                    if (element.estado) {
+                        sublist.setSublistValue({ id: 'custpage_estado', line: i, value: element.estado });
+                    }
+                    if (element.fec_doc) {
+                        sublist.setSublistValue({ id: 'custpage_fec_doc', line: i, value: element.fec_doc });
+                    }
+                });
+            }
 
             // Setear cantidad de registros
             if (checkPaginate == 'F') {
@@ -128,62 +130,64 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             sublist.addField({ id: 'custpage_total_soles', type: serverWidget.FieldType.TEXT, label: 'C. TOTAL. S/.' });
 
             // Setear los datos obtenidos a sublista
-            data.forEach((element, i) => {
-                if (element.nro_ord) {
-                    sublist.setSublistValue({ id: 'custpage_nro_ord', line: i, value: element.nro_ord });
-                }
-                if (element.lote) {
-                    sublist.setSublistValue({ id: 'custpage_lote', line: i, value: element.lote });
-                }
-                if (element.fec_ord) {
-                    sublist.setSublistValue({ id: 'custpage_fec_ord', line: i, value: element.fec_ord });
-                }
-                if (element.cant_teor) {
-                    sublist.setSublistValue({ id: 'custpage_cant_teor', line: i, value: element.cant_teor });
-                }
-                if (element.cant_real) {
-                    sublist.setSublistValue({ id: 'custpage_cant_real', line: i, value: element.cant_real });
-                }
-                if (element.rend) {
-                    sublist.setSublistValue({ id: 'custpage_rend', line: i, value: element.rend });
-                }
-                if (element.categoria) {
-                    sublist.setSublistValue({ id: 'custpage_categoria', line: i, value: element.categoria });
-                }
-                if (element.empleado_proveedor_servicio) {
-                    sublist.setSublistValue({ id: 'custpage_empleado', line: i, value: element.empleado_proveedor_servicio });
-                }
-                if (element.lin) {
-                    sublist.setSublistValue({ id: 'custpage_lin', line: i, value: element.lin });
-                }
-                if (element.codigo) {
-                    sublist.setSublistValue({ id: 'custpage_codigo', line: i, value: element.codigo });
-                }
-                if (element.producto) {
-                    sublist.setSublistValue({ id: 'custpage_producto', line: i, value: element.producto });
-                }
-                if (element.horas) {
-                    sublist.setSublistValue({ id: 'custpage_horas', line: i, value: element.horas });
-                }
-                if (element.fec_cierre) {
-                    sublist.setSublistValue({ id: 'custpage_fec_cierre', line: i, value: element.fec_cierre });
-                }
-                if (element.anio) {
-                    sublist.setSublistValue({ id: 'custpage_anio', line: i, value: element.anio });
-                }
-                if (element.mes) {
-                    sublist.setSublistValue({ id: 'custpage_mes', line: i, value: element.mes });
-                }
-                if (element.estado) {
-                    sublist.setSublistValue({ id: 'custpage_estado', line: i, value: element.estado });
-                }
-                if (element.soles_x_hr) {
-                    sublist.setSublistValue({ id: 'custpage_soles_x_hr', line: i, value: element.soles_x_hr });
-                }
-                if (element.total_soles) {
-                    sublist.setSublistValue({ id: 'custpage_total_soles', line: i, value: element.total_soles });
-                }
-            });
+            if (Object.keys(data).length > 0) {
+                data.forEach((element, i) => {
+                    if (element.nro_ord) {
+                        sublist.setSublistValue({ id: 'custpage_nro_ord', line: i, value: element.nro_ord });
+                    }
+                    if (element.lote) {
+                        sublist.setSublistValue({ id: 'custpage_lote', line: i, value: element.lote });
+                    }
+                    if (element.fec_ord) {
+                        sublist.setSublistValue({ id: 'custpage_fec_ord', line: i, value: element.fec_ord });
+                    }
+                    if (element.cant_teor) {
+                        sublist.setSublistValue({ id: 'custpage_cant_teor', line: i, value: element.cant_teor });
+                    }
+                    if (element.cant_real) {
+                        sublist.setSublistValue({ id: 'custpage_cant_real', line: i, value: element.cant_real });
+                    }
+                    if (element.rend) {
+                        sublist.setSublistValue({ id: 'custpage_rend', line: i, value: element.rend });
+                    }
+                    if (element.categoria) {
+                        sublist.setSublistValue({ id: 'custpage_categoria', line: i, value: element.categoria });
+                    }
+                    if (element.empleado_proveedor_servicio) {
+                        sublist.setSublistValue({ id: 'custpage_empleado', line: i, value: element.empleado_proveedor_servicio });
+                    }
+                    if (element.lin) {
+                        sublist.setSublistValue({ id: 'custpage_lin', line: i, value: element.lin });
+                    }
+                    if (element.codigo) {
+                        sublist.setSublistValue({ id: 'custpage_codigo', line: i, value: element.codigo });
+                    }
+                    if (element.producto) {
+                        sublist.setSublistValue({ id: 'custpage_producto', line: i, value: element.producto });
+                    }
+                    if (element.horas) {
+                        sublist.setSublistValue({ id: 'custpage_horas', line: i, value: element.horas });
+                    }
+                    if (element.fec_cierre) {
+                        sublist.setSublistValue({ id: 'custpage_fec_cierre', line: i, value: element.fec_cierre });
+                    }
+                    if (element.anio) {
+                        sublist.setSublistValue({ id: 'custpage_anio', line: i, value: element.anio });
+                    }
+                    if (element.mes) {
+                        sublist.setSublistValue({ id: 'custpage_mes', line: i, value: element.mes });
+                    }
+                    if (element.estado) {
+                        sublist.setSublistValue({ id: 'custpage_estado', line: i, value: element.estado });
+                    }
+                    if (element.soles_x_hr) {
+                        sublist.setSublistValue({ id: 'custpage_soles_x_hr', line: i, value: element.soles_x_hr });
+                    }
+                    if (element.total_soles) {
+                        sublist.setSublistValue({ id: 'custpage_total_soles', line: i, value: element.total_soles });
+                    }
+                });
+            }
 
             // Setear cantidad de registros
             if (checkPaginate == 'F') {
@@ -223,62 +227,64 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             sublist.addField({ id: 'custpage_total_soles', type: serverWidget.FieldType.TEXT, label: 'C. TOTAL. S/.' });
 
             // Setear los datos obtenidos a sublista
-            data.forEach((element, i) => {
-                if (element.nro_ord) {
-                    sublist.setSublistValue({ id: 'custpage_nro_ord', line: i, value: element.nro_ord });
-                }
-                if (element.lote) {
-                    sublist.setSublistValue({ id: 'custpage_lote', line: i, value: element.lote });
-                }
-                if (element.fec_ord) {
-                    sublist.setSublistValue({ id: 'custpage_fec_ord', line: i, value: element.fec_ord });
-                }
-                if (element.cant_teor) {
-                    sublist.setSublistValue({ id: 'custpage_cant_teor', line: i, value: element.cant_teor });
-                }
-                if (element.cant_real) {
-                    sublist.setSublistValue({ id: 'custpage_cant_real', line: i, value: element.cant_real });
-                }
-                if (element.categoria) {
-                    sublist.setSublistValue({ id: 'custpage_categoria', line: i, value: element.categoria });
-                }
-                if (element.servicios) {
-                    sublist.setSublistValue({ id: 'custpage_factura', line: i, value: element.servicios });
-                }
-                if (element.empleado_proveedor_servicio) {
-                    sublist.setSublistValue({ id: 'custpage_proveedor_servicio', line: i, value: element.empleado_proveedor_servicio });
-                }
-                if (element.lin) {
-                    sublist.setSublistValue({ id: 'custpage_lin', line: i, value: element.lin });
-                }
-                if (element.codigo) {
-                    sublist.setSublistValue({ id: 'custpage_codigo', line: i, value: element.codigo });
-                }
-                if (element.producto) {
-                    sublist.setSublistValue({ id: 'custpage_producto', line: i, value: element.producto });
-                }
-                if (element.horas) {
-                    sublist.setSublistValue({ id: 'custpage_horas', line: i, value: element.horas });
-                }
-                if (element.fec_cierre) {
-                    sublist.setSublistValue({ id: 'custpage_fec_cierre', line: i, value: element.fec_cierre });
-                }
-                if (element.anio) {
-                    sublist.setSublistValue({ id: 'custpage_anio', line: i, value: element.anio });
-                }
-                if (element.mes) {
-                    sublist.setSublistValue({ id: 'custpage_mes', line: i, value: element.mes });
-                }
-                if (element.estado) {
-                    sublist.setSublistValue({ id: 'custpage_estado', line: i, value: element.estado });
-                }
-                if (element.soles_x_hr) {
-                    sublist.setSublistValue({ id: 'custpage_soles_x_hr', line: i, value: element.soles_x_hr });
-                }
-                if (element.total_soles) {
-                    sublist.setSublistValue({ id: 'custpage_total_soles', line: i, value: element.total_soles });
-                }
-            });
+            if (Object.keys(data).length > 0) {
+                data.forEach((element, i) => {
+                    if (element.nro_ord) {
+                        sublist.setSublistValue({ id: 'custpage_nro_ord', line: i, value: element.nro_ord });
+                    }
+                    if (element.lote) {
+                        sublist.setSublistValue({ id: 'custpage_lote', line: i, value: element.lote });
+                    }
+                    if (element.fec_ord) {
+                        sublist.setSublistValue({ id: 'custpage_fec_ord', line: i, value: element.fec_ord });
+                    }
+                    if (element.cant_teor) {
+                        sublist.setSublistValue({ id: 'custpage_cant_teor', line: i, value: element.cant_teor });
+                    }
+                    if (element.cant_real) {
+                        sublist.setSublistValue({ id: 'custpage_cant_real', line: i, value: element.cant_real });
+                    }
+                    if (element.categoria) {
+                        sublist.setSublistValue({ id: 'custpage_categoria', line: i, value: element.categoria });
+                    }
+                    if (element.servicios) {
+                        sublist.setSublistValue({ id: 'custpage_factura', line: i, value: element.servicios });
+                    }
+                    if (element.empleado_proveedor_servicio) {
+                        sublist.setSublistValue({ id: 'custpage_proveedor_servicio', line: i, value: element.empleado_proveedor_servicio });
+                    }
+                    if (element.lin) {
+                        sublist.setSublistValue({ id: 'custpage_lin', line: i, value: element.lin });
+                    }
+                    if (element.codigo) {
+                        sublist.setSublistValue({ id: 'custpage_codigo', line: i, value: element.codigo });
+                    }
+                    if (element.producto) {
+                        sublist.setSublistValue({ id: 'custpage_producto', line: i, value: element.producto });
+                    }
+                    if (element.horas) {
+                        sublist.setSublistValue({ id: 'custpage_horas', line: i, value: element.horas });
+                    }
+                    if (element.fec_cierre) {
+                        sublist.setSublistValue({ id: 'custpage_fec_cierre', line: i, value: element.fec_cierre });
+                    }
+                    if (element.anio) {
+                        sublist.setSublistValue({ id: 'custpage_anio', line: i, value: element.anio });
+                    }
+                    if (element.mes) {
+                        sublist.setSublistValue({ id: 'custpage_mes', line: i, value: element.mes });
+                    }
+                    if (element.estado) {
+                        sublist.setSublistValue({ id: 'custpage_estado', line: i, value: element.estado });
+                    }
+                    if (element.soles_x_hr) {
+                        sublist.setSublistValue({ id: 'custpage_soles_x_hr', line: i, value: element.soles_x_hr });
+                    }
+                    if (element.total_soles) {
+                        sublist.setSublistValue({ id: 'custpage_total_soles', line: i, value: element.total_soles });
+                    }
+                });
+            }
 
             // Setear cantidad de registros
             if (checkPaginate == 'F') {
@@ -321,71 +327,73 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             sublist.addField({ id: 'custpage_tot_gen', type: serverWidget.FieldType.TEXT, label: 'tot_gen' });
 
             // Setear los datos obtenidos a sublista
-            data.forEach((element, i) => {
-                if (element.nro_ord) {
-                    sublist.setSublistValue({ id: 'custpage_nro_ord', line: i, value: element.nro_ord });
-                }
-                if (element.lote) {
-                    sublist.setSublistValue({ id: 'custpage_lote', line: i, value: element.lote });
-                }
-                if (element.fec_ord) {
-                    sublist.setSublistValue({ id: 'custpage_fec_ord', line: i, value: element.fec_ord });
-                }
-                if (element.cant_teor) {
-                    sublist.setSublistValue({ id: 'custpage_cant_teor', line: i, value: element.cant_teor });
-                }
-                if (element.cant_real) {
-                    sublist.setSublistValue({ id: 'custpage_cant_real', line: i, value: element.cant_real });
-                }
-                if (element.categoria) {
-                    sublist.setSublistValue({ id: 'custpage_categoria', line: i, value: element.categoria });
-                }
-                if (element.empleado_proveedor_servicio) {
-                    sublist.setSublistValue({ id: 'custpage_empleado', line: i, value: element.empleado_proveedor_servicio });
-                }
-                if (element.lin) {
-                    sublist.setSublistValue({ id: 'custpage_lin', line: i, value: element.lin });
-                }
-                if (element.codigo) {
-                    sublist.setSublistValue({ id: 'custpage_codigo', line: i, value: element.codigo });
-                }
-                if (element.producto) {
-                    sublist.setSublistValue({ id: 'custpage_producto', line: i, value: element.producto });
-                }
-                if (element.horas) {
-                    sublist.setSublistValue({ id: 'custpage_horas', line: i, value: element.horas });
-                }
-                if (element.fec_cierre) {
-                    sublist.setSublistValue({ id: 'custpage_fec_cierre', line: i, value: element.fec_cierre });
-                }
-                if (element.estado) {
-                    sublist.setSublistValue({ id: 'custpage_estado', line: i, value: element.estado });
-                }
-                if (element.total_iny || objHelper.isNumeric(element.total_iny)) {
-                    sublist.setSublistValue({ id: 'custpage_iny_2211', line: i, value: element.total_iny });
-                }
-                if (element.total_sem || objHelper.isNumeric(element.total_sem)) {
-                    sublist.setSublistValue({ id: 'custpage_sem_2221', line: i, value: element.total_sem });
-                }
-                if (element.total_liq || objHelper.isNumeric(element.total_liq)) {
-                    sublist.setSublistValue({ id: 'custpage_liq_2231', line: i, value: element.total_liq });
-                }
-                if (element.total_sot || objHelper.isNumeric(element.total_sot)) {
-                    sublist.setSublistValue({ id: 'custpage_sot_2241', line: i, value: element.total_sot });
-                }
-                if (element.total_sol || objHelper.isNumeric(element.total_sol)) {
-                    sublist.setSublistValue({ id: 'custpage_sol_2251', line: i, value: element.total_sol });
-                }
-                if (element.total_pol || objHelper.isNumeric(element.total_pol)) {
-                    sublist.setSublistValue({ id: 'custpage_pol_2261', line: i, value: element.total_pol });
-                }
-                if (element.total_aco || objHelper.isNumeric(element.total_aco)) {
-                    sublist.setSublistValue({ id: 'custpage_aco_2271', line: i, value: element.total_aco });
-                }
-                if (element.total_gen || objHelper.isNumeric(element.total_gen)) {
-                    sublist.setSublistValue({ id: 'custpage_tot_gen', line: i, value: element.total_gen });
-                }
-            });
+            if (Object.keys(data).length > 0) {
+                data.forEach((element, i) => {
+                    if (element.nro_ord) {
+                        sublist.setSublistValue({ id: 'custpage_nro_ord', line: i, value: element.nro_ord });
+                    }
+                    if (element.lote) {
+                        sublist.setSublistValue({ id: 'custpage_lote', line: i, value: element.lote });
+                    }
+                    if (element.fec_ord) {
+                        sublist.setSublistValue({ id: 'custpage_fec_ord', line: i, value: element.fec_ord });
+                    }
+                    if (element.cant_teor) {
+                        sublist.setSublistValue({ id: 'custpage_cant_teor', line: i, value: element.cant_teor });
+                    }
+                    if (element.cant_real) {
+                        sublist.setSublistValue({ id: 'custpage_cant_real', line: i, value: element.cant_real });
+                    }
+                    if (element.categoria) {
+                        sublist.setSublistValue({ id: 'custpage_categoria', line: i, value: element.categoria });
+                    }
+                    if (element.empleado_proveedor_servicio) {
+                        sublist.setSublistValue({ id: 'custpage_empleado', line: i, value: element.empleado_proveedor_servicio });
+                    }
+                    if (element.lin) {
+                        sublist.setSublistValue({ id: 'custpage_lin', line: i, value: element.lin });
+                    }
+                    if (element.codigo) {
+                        sublist.setSublistValue({ id: 'custpage_codigo', line: i, value: element.codigo });
+                    }
+                    if (element.producto) {
+                        sublist.setSublistValue({ id: 'custpage_producto', line: i, value: element.producto });
+                    }
+                    if (element.horas) {
+                        sublist.setSublistValue({ id: 'custpage_horas', line: i, value: element.horas });
+                    }
+                    if (element.fec_cierre) {
+                        sublist.setSublistValue({ id: 'custpage_fec_cierre', line: i, value: element.fec_cierre });
+                    }
+                    if (element.estado) {
+                        sublist.setSublistValue({ id: 'custpage_estado', line: i, value: element.estado });
+                    }
+                    if (element.total_iny || objHelper.isNumeric(element.total_iny)) {
+                        sublist.setSublistValue({ id: 'custpage_iny_2211', line: i, value: element.total_iny });
+                    }
+                    if (element.total_sem || objHelper.isNumeric(element.total_sem)) {
+                        sublist.setSublistValue({ id: 'custpage_sem_2221', line: i, value: element.total_sem });
+                    }
+                    if (element.total_liq || objHelper.isNumeric(element.total_liq)) {
+                        sublist.setSublistValue({ id: 'custpage_liq_2231', line: i, value: element.total_liq });
+                    }
+                    if (element.total_sot || objHelper.isNumeric(element.total_sot)) {
+                        sublist.setSublistValue({ id: 'custpage_sot_2241', line: i, value: element.total_sot });
+                    }
+                    if (element.total_sol || objHelper.isNumeric(element.total_sol)) {
+                        sublist.setSublistValue({ id: 'custpage_sol_2251', line: i, value: element.total_sol });
+                    }
+                    if (element.total_pol || objHelper.isNumeric(element.total_pol)) {
+                        sublist.setSublistValue({ id: 'custpage_pol_2261', line: i, value: element.total_pol });
+                    }
+                    if (element.total_aco || objHelper.isNumeric(element.total_aco)) {
+                        sublist.setSublistValue({ id: 'custpage_aco_2271', line: i, value: element.total_aco });
+                    }
+                    if (element.total_gen || objHelper.isNumeric(element.total_gen)) {
+                        sublist.setSublistValue({ id: 'custpage_tot_gen', line: i, value: element.total_gen });
+                    }
+                });
+            }
 
             // Setear cantidad de registros
             if (checkPaginate == 'F') {
@@ -425,28 +433,30 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             csvData.push(current);
 
             // Setear contenido de csv
-            data.forEach((element, i) => {
-                let current = [];
-                current.push(element.nro_ord);
-                current.push(element.lote);
-                current.push(element.fec_ord);
-                current.push(element.cant_teor);
-                current.push(element.cant_real);
-                current.push(element.rend);
-                current.push(element.codigo);
-                current.push(element.producto);
-                current.push(element.lin_mat);
-                current.push(element.cod_mat);
-                current.push(element.des_mat);
-                current.push(element.cantidad);
-                current.push(element.costo);
-                current.push(element.fec_cierre);
-                current.push(element.estado);
-                current.push(element.fec_doc);
+            if (Object.keys(data).length > 0) {
+                data.forEach((element, i) => {
+                    let current = [];
+                    current.push(element.nro_ord);
+                    current.push(element.lote);
+                    current.push(element.fec_ord);
+                    current.push(element.cant_teor);
+                    current.push(element.cant_real);
+                    current.push(element.rend);
+                    current.push(element.codigo);
+                    current.push(element.producto);
+                    current.push(element.lin_mat);
+                    current.push(element.cod_mat);
+                    current.push(element.des_mat);
+                    current.push(element.cantidad);
+                    current.push(element.costo);
+                    current.push(element.fec_cierre);
+                    current.push(element.estado);
+                    current.push(element.fec_doc);
 
-                current = current.join(';');
-                csvData.push(current);
-            });
+                    current = current.join(';');
+                    csvData.push(current);
+                });
+            }
             csvData = csvData.join("\r\n");
 
             let csvFileMD = file.create({
@@ -492,30 +502,32 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             csvData.push(current);
 
             // Setear contenido de csv
-            data.forEach((element, i) => {
-                let current = [];
-                current.push(element.nro_ord);
-                current.push(element.lote);
-                current.push(element.fec_ord);
-                current.push(element.cant_teor);
-                current.push(element.cant_real);
-                current.push(element.rend);
-                current.push(element.categoria);
-                current.push(element.empleado_proveedor_servicio);
-                current.push(element.lin);
-                current.push(element.codigo);
-                current.push(element.producto);
-                current.push(element.horas);
-                current.push(element.fec_cierre);
-                current.push(element.anio);
-                current.push(element.mes);
-                current.push(element.estado);
-                current.push(element.soles_x_hr);
-                current.push(element.total_soles);
+            if (Object.keys(data).length > 0) {
+                data.forEach((element, i) => {
+                    let current = [];
+                    current.push(element.nro_ord);
+                    current.push(element.lote);
+                    current.push(element.fec_ord);
+                    current.push(element.cant_teor);
+                    current.push(element.cant_real);
+                    current.push(element.rend);
+                    current.push(element.categoria);
+                    current.push(element.empleado_proveedor_servicio);
+                    current.push(element.lin);
+                    current.push(element.codigo);
+                    current.push(element.producto);
+                    current.push(element.horas);
+                    current.push(element.fec_cierre);
+                    current.push(element.anio);
+                    current.push(element.mes);
+                    current.push(element.estado);
+                    current.push(element.soles_x_hr);
+                    current.push(element.total_soles);
 
-                current = current.join(';');
-                csvData.push(current);
-            });
+                    current = current.join(';');
+                    csvData.push(current);
+                });
+            }
             csvData = csvData.join("\r\n");
 
             let csvFileMOD = file.create({
@@ -561,30 +573,32 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             csvData.push(current);
 
             // Setear contenido de csv
-            data.forEach((element, i) => {
-                let current = [];
-                current.push(element.nro_ord);
-                current.push(element.lote);
-                current.push(element.fec_ord);
-                current.push(element.cant_teor);
-                current.push(element.cant_real);
-                current.push(element.categoria);
-                current.push(element.servicios);
-                current.push(element.empleado_proveedor_servicio);
-                current.push(element.lin);
-                current.push(element.codigo);
-                current.push(element.producto);
-                current.push(element.horas);
-                current.push(element.fec_cierre);
-                current.push(element.anio);
-                current.push(element.mes);
-                current.push(element.estado);
-                current.push(element.soles_x_hr);
-                current.push(element.total_soles);
+            if (Object.keys(data).length > 0) {
+                data.forEach((element, i) => {
+                    let current = [];
+                    current.push(element.nro_ord);
+                    current.push(element.lote);
+                    current.push(element.fec_ord);
+                    current.push(element.cant_teor);
+                    current.push(element.cant_real);
+                    current.push(element.categoria);
+                    current.push(element.servicios);
+                    current.push(element.empleado_proveedor_servicio);
+                    current.push(element.lin);
+                    current.push(element.codigo);
+                    current.push(element.producto);
+                    current.push(element.horas);
+                    current.push(element.fec_cierre);
+                    current.push(element.anio);
+                    current.push(element.mes);
+                    current.push(element.estado);
+                    current.push(element.soles_x_hr);
+                    current.push(element.total_soles);
 
-                current = current.join(';');
-                csvData.push(current);
-            });
+                    current = current.join(';');
+                    csvData.push(current);
+                });
+            }
             csvData = csvData.join("\r\n");
 
             let csvFileSRV = file.create({
@@ -653,53 +667,55 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             csvData.push(current);
 
             // Setear contenido de csv
-            data.forEach((element, i) => {
-                let current = [];
-                current.push(element.nro_ord);
-                current.push(element.lote);
-                current.push(element.fec_ord);
-                current.push(element.cant_teor);
-                current.push(element.cant_real);
-                current.push(element.categoria);
-                current.push(element.empleado_proveedor_servicio);
-                current.push(element.lin);
-                current.push(element.codigo);
-                current.push(element.producto);
-                current.push(element.horas);
-                current.push(element.fec_cierre);
-                current.push(element.estado);
-                current.push(element.total_iny);
-                current.push(element.total_sem);
-                current.push(element.total_liq);
-                current.push(element.total_sot);
-                current.push(element.total_sol);
-                current.push(element.total_pol);
-                current.push(element.total_aco);
-                current.push(element.total_gen);
+            if (Object.keys(data).length > 0) {
+                data.forEach((element, i) => {
+                    let current = [];
+                    current.push(element.nro_ord);
+                    current.push(element.lote);
+                    current.push(element.fec_ord);
+                    current.push(element.cant_teor);
+                    current.push(element.cant_real);
+                    current.push(element.categoria);
+                    current.push(element.empleado_proveedor_servicio);
+                    current.push(element.lin);
+                    current.push(element.codigo);
+                    current.push(element.producto);
+                    current.push(element.horas);
+                    current.push(element.fec_cierre);
+                    current.push(element.estado);
+                    current.push(element.total_iny);
+                    current.push(element.total_sem);
+                    current.push(element.total_liq);
+                    current.push(element.total_sot);
+                    current.push(element.total_sol);
+                    current.push(element.total_pol);
+                    current.push(element.total_aco);
+                    current.push(element.total_gen);
 
-                // TOTAL DE IMPORTE BRUTO POR CENTRO DE COSTO
-                // current.push('');
-                // current.push(element.total_cc_iny);
-                // current.push(element.total_cc_sem);
-                // current.push(element.total_cc_liq);
-                // current.push(element.total_cc_sot);
-                // current.push(element.total_cc_sol);
-                // current.push(element.total_cc_pol);
-                // current.push(element.total_cc_aco);
+                    // TOTAL DE IMPORTE BRUTO POR CENTRO DE COSTO
+                    // current.push('');
+                    // current.push(element.total_cc_iny);
+                    // current.push(element.total_cc_sem);
+                    // current.push(element.total_cc_liq);
+                    // current.push(element.total_cc_sot);
+                    // current.push(element.total_cc_sol);
+                    // current.push(element.total_cc_pol);
+                    // current.push(element.total_cc_aco);
 
-                // TOTAL DE HORAS DE CIF POR LINEA
-                // current.push('');
-                // current.push(element.total_hr_iny);
-                // current.push(element.total_hr_sem);
-                // current.push(element.total_hr_liq);
-                // current.push(element.total_hr_sot);
-                // current.push(element.total_hr_sol);
-                // current.push(element.total_hr_pol);
-                // current.push(element.total_hr_aco);
+                    // TOTAL DE HORAS DE CIF POR LINEA
+                    // current.push('');
+                    // current.push(element.total_hr_iny);
+                    // current.push(element.total_hr_sem);
+                    // current.push(element.total_hr_liq);
+                    // current.push(element.total_hr_sot);
+                    // current.push(element.total_hr_sol);
+                    // current.push(element.total_hr_pol);
+                    // current.push(element.total_hr_aco);
 
-                current = current.join(';');
-                csvData.push(current);
-            });
+                    current = current.join(';');
+                    csvData.push(current);
+                });
+            }
             csvData = csvData.join("\r\n");
 
             let meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
@@ -737,20 +753,22 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             csvData.push(current);
 
             // Setear contenido de csv
-            data.forEach((element, i) => {
-                let current = [];
-                current.push(element.label);
-                current.push(element.total_iny);
-                current.push(element.total_sem);
-                current.push(element.total_liq);
-                current.push(element.total_sot);
-                current.push(element.total_sol);
-                current.push(element.total_pol);
-                current.push(element.total_aco);
+            if (Object.keys(data).length > 0) {
+                data.forEach((element, i) => {
+                    let current = [];
+                    current.push(element.label);
+                    current.push(element.total_iny);
+                    current.push(element.total_sem);
+                    current.push(element.total_liq);
+                    current.push(element.total_sot);
+                    current.push(element.total_sol);
+                    current.push(element.total_pol);
+                    current.push(element.total_aco);
 
-                current = current.join(';');
-                csvData.push(current);
-            });
+                    current = current.join(';');
+                    csvData.push(current);
+                });
+            }
             csvData = csvData.join("\r\n");
 
             let csvFileFactorCIF = file.create({

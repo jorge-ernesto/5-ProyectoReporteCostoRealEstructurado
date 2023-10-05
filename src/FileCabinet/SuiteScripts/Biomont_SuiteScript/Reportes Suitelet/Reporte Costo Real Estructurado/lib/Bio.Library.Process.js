@@ -218,12 +218,12 @@ define(['N'],
                         data_srv.push(json);
                     }
 
-                    // Validar parametros para filtrar datos para obtener el factor del CIF por meses
+                    // Validar parametros para filtrar datos - para obtener data CIF por año y mes
                     if (Object.keys(parameters).length > 0) {
 
                         // Filtrar por Fecha de Cierre y Estado
                         // En JavaScript, los meses se representan con valores enteros del 0 al 11, donde 0 es enero y 11 es diciembre.
-                        if (Number(json.anio) == Number(parameters.anio) && Number(json.mes) == Number(parameters.mes) + 1 && ['Cerrada', 'Closed', 'En curso', 'In Process'].includes(json.estado)) {
+                        if (Number(json.anio) == Number(parameters.anio) && Number(json.mes) == Number(parameters.mes) + 1 && ['Cerrada', 'Closed', 'En curso', 'In Process', 'Liberada', 'Released'].includes(json.estado)) {
 
                             // Filtrar por Linea
                             if (['1', '9', '3', '10', '11', '2'].includes(lin_id) || ['INYECTABLES', 'SEMISOLIDOS', 'LIQUIDOS', 'SOLUCIONES TOPICAS', 'SOLIDOS', 'POLVOS'].includes(lin)) {
@@ -246,9 +246,13 @@ define(['N'],
             }
 
             // Agregar totales CIF
-            if (Object.keys(parameters).length > 0) {
-                let dataFactorCIF = parameters.dataFactorCIF;
-                data = addTotalesCIF(data, dataFactorCIF);
+            if (Object.keys(data).length > 0) { // Validar data CIF
+                if (Object.keys(parameters).length > 0) { // Validar parametros
+                    if (parameters.dataFactorCIF) { // Validar factor CIF - por año y mes
+                        let dataFactorCIF = parameters.dataFactorCIF;
+                        data = addTotalesCIF(data, dataFactorCIF);
+                    }
+                }
             }
 
             return data;
@@ -265,39 +269,39 @@ define(['N'],
             // TOTAL DE IMPORTE BRUTO POR CENTRO DE COSTO
             json = {
                 estado: 'TOTAL CC',
-                total_iny: dataFactorCIF['total_cc_iny'],
-                total_sem: dataFactorCIF['total_cc_sem'],
-                total_liq: dataFactorCIF['total_cc_liq'],
-                total_sot: dataFactorCIF['total_cc_sot'],
-                total_sol: dataFactorCIF['total_cc_sol'],
-                total_pol: dataFactorCIF['total_cc_pol'],
-                total_aco: dataFactorCIF['total_cc_aco'],
+                total_iny: dataFactorCIF.total_cc_iny,
+                total_sem: dataFactorCIF.total_cc_sem,
+                total_liq: dataFactorCIF.total_cc_liq,
+                total_sot: dataFactorCIF.total_cc_sot,
+                total_sol: dataFactorCIF.total_cc_sol,
+                total_pol: dataFactorCIF.total_cc_pol,
+                total_aco: dataFactorCIF.total_cc_aco,
             }
             data.push(json);
 
             // TOTAL DE HORAS DE CIF POR LINEA
             json = {
                 estado: 'TOTAL HRS LIN',
-                total_iny: dataFactorCIF['total_hr_iny'],
-                total_sem: dataFactorCIF['total_hr_sem'],
-                total_liq: dataFactorCIF['total_hr_liq'],
-                total_sot: dataFactorCIF['total_hr_sot'],
-                total_sol: dataFactorCIF['total_hr_sol'],
-                total_pol: dataFactorCIF['total_hr_pol'],
-                total_aco: dataFactorCIF['total_hr_aco'],
+                total_iny: dataFactorCIF.total_hr_iny,
+                total_sem: dataFactorCIF.total_hr_sem,
+                total_liq: dataFactorCIF.total_hr_liq,
+                total_sot: dataFactorCIF.total_hr_sot,
+                total_sol: dataFactorCIF.total_hr_sol,
+                total_pol: dataFactorCIF.total_hr_pol,
+                total_aco: dataFactorCIF.total_hr_aco,
             }
             data.push(json);
 
             // FACTOR CIF POR LINEA / CENTRO DE COSTO
             json = {
                 estado: 'FACTOR',
-                total_iny: dataFactorCIF['factor_cif_iny'],
-                total_sem: dataFactorCIF['factor_cif_sem'],
-                total_liq: dataFactorCIF['factor_cif_liq'],
-                total_sot: dataFactorCIF['factor_cif_sot'],
-                total_sol: dataFactorCIF['factor_cif_sol'],
-                total_pol: dataFactorCIF['factor_cif_pol'],
-                total_aco: dataFactorCIF['factor_cif_aco'],
+                total_iny: dataFactorCIF.factor_cif_iny,
+                total_sem: dataFactorCIF.factor_cif_sem,
+                total_liq: dataFactorCIF.factor_cif_liq,
+                total_sot: dataFactorCIF.factor_cif_sot,
+                total_sol: dataFactorCIF.factor_cif_sol,
+                total_pol: dataFactorCIF.factor_cif_pol,
+                total_aco: dataFactorCIF.factor_cif_aco,
             }
             data.push(json);
 

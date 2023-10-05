@@ -24,7 +24,7 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
         function createForm() {
             // Crear formulario
             let form = serverWidget.createForm({
-                title: 'Hoja de costos por orden de producción (CMD, MOD, CIF)',
+                title: 'Reporte hojas de costos por orden de producción (CMD, MOD, SRV, CIF)',
                 hideNavBar: false
             });
 
@@ -251,7 +251,7 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
 
                     // Obtener factor CIF por meses y asignarlos a las OTs
                     let fechas = objHelper.getDatesByOT(dataOT_Completo);
-                    let dataFactorCIF = {};
+                    let dataFactorCIF = {}; // * Audit: Util, manejo de JSON
                     fechas.forEach(element => {
                         let year = element.year;
                         let month = element.month;
@@ -267,7 +267,7 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                     // objHelper.error_log('', fechas);
                     // objHelper.error_log('', dataFactorCIF);
                     // objHelper.error_log('', dataOT_Completo);
-                    // objHelper.error_log_by_lote('', dataOT_Completo, ['072823', '062333', '072953']);
+                    // objHelper.error_log_by_lote('', dataOT_Completo, ['083433']);
 
                     // Procesar reporte
                     let dataMD = objProcessMe.getDataMD(dataOT_Completo);
@@ -277,6 +277,10 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                     let dataFactorCIF_Formateada = objProcessMe.getDataFactorCIF(dataFactorCIF);
 
                     // Debug
+                    // objHelper.error_log('', dataMD);
+                    // objHelper.error_log('', dataMOD);
+                    // objHelper.error_log('', dataSRV);
+                    // objHelper.error_log('', dataCIF);
                     // objHelper.error_log('', dataFactorCIF_Formateada);
 
                     if (button == 'consultar') {
