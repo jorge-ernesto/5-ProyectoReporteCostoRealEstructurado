@@ -119,6 +119,8 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             sublist.addField({ id: 'custpage_categoria', type: serverWidget.FieldType.TEXT, label: 'categoria' });
             sublist.addField({ id: 'custpage_empleado', type: serverWidget.FieldType.TEXT, label: 'empleado' });
             sublist.addField({ id: 'custpage_lin', type: serverWidget.FieldType.TEXT, label: 'lin' });
+            sublist.addField({ id: 'custpage_ot_centro_costo', type: serverWidget.FieldType.TEXT, label: 'ot_centro_costo' });
+            sublist.addField({ id: 'custpage_ensamblaje_centro_costo', type: serverWidget.FieldType.TEXT, label: 'ensamblaje_centro_costo' });
             sublist.addField({ id: 'custpage_codigo', type: serverWidget.FieldType.TEXT, label: 'codigo' });
             sublist.addField({ id: 'custpage_producto', type: serverWidget.FieldType.TEXT, label: 'producto' });
             sublist.addField({ id: 'custpage_horas', type: serverWidget.FieldType.TEXT, label: 'horas' });
@@ -158,6 +160,12 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
                     }
                     if (element.lin) {
                         sublist.setSublistValue({ id: 'custpage_lin', line: i, value: element.lin });
+                    }
+                    if (element.centro_costo_nombre) {
+                        sublist.setSublistValue({ id: 'custpage_ot_centro_costo', line: i, value: element.centro_costo_nombre });
+                    }
+                    if (element.ensamblaje_centro_costo_nombre) {
+                        sublist.setSublistValue({ id: 'custpage_ensamblaje_centro_costo', line: i, value: element.ensamblaje_centro_costo_nombre });
                     }
                     if (element.codigo) {
                         sublist.setSublistValue({ id: 'custpage_codigo', line: i, value: element.codigo });
@@ -216,6 +224,8 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             sublist.addField({ id: 'custpage_factura', type: serverWidget.FieldType.TEXT, label: 'factura' });
             sublist.addField({ id: 'custpage_proveedor_servicio', type: serverWidget.FieldType.TEXT, label: 'proveedor_servicio' });
             sublist.addField({ id: 'custpage_lin', type: serverWidget.FieldType.TEXT, label: 'lin' });
+            sublist.addField({ id: 'custpage_ot_centro_costo', type: serverWidget.FieldType.TEXT, label: 'ot_centro_costo' });
+            sublist.addField({ id: 'custpage_ensamblaje_centro_costo', type: serverWidget.FieldType.TEXT, label: 'ensamblaje_centro_costo' });
             sublist.addField({ id: 'custpage_codigo', type: serverWidget.FieldType.TEXT, label: 'codigo' });
             sublist.addField({ id: 'custpage_producto', type: serverWidget.FieldType.TEXT, label: 'producto' });
             sublist.addField({ id: 'custpage_horas', type: serverWidget.FieldType.TEXT, label: 'horas' });
@@ -255,6 +265,12 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
                     }
                     if (element.lin) {
                         sublist.setSublistValue({ id: 'custpage_lin', line: i, value: element.lin });
+                    }
+                    if (element.centro_costo_nombre) {
+                        sublist.setSublistValue({ id: 'custpage_ot_centro_costo', line: i, value: element.centro_costo_nombre });
+                    }
+                    if (element.ensamblaje_centro_costo_nombre) {
+                        sublist.setSublistValue({ id: 'custpage_ensamblaje_centro_costo', line: i, value: element.ensamblaje_centro_costo_nombre });
                     }
                     if (element.codigo) {
                         sublist.setSublistValue({ id: 'custpage_codigo', line: i, value: element.codigo });
@@ -312,6 +328,8 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             sublist.addField({ id: 'custpage_categoria', type: serverWidget.FieldType.TEXT, label: 'categoria' });
             sublist.addField({ id: 'custpage_empleado', type: serverWidget.FieldType.TEXT, label: 'empleado' });
             sublist.addField({ id: 'custpage_lin', type: serverWidget.FieldType.TEXT, label: 'lin' });
+            sublist.addField({ id: 'custpage_ot_centro_costo', type: serverWidget.FieldType.TEXT, label: 'ot_centro_costo' });
+            sublist.addField({ id: 'custpage_ensamblaje_centro_costo', type: serverWidget.FieldType.TEXT, label: 'ensamblaje_centro_costo' });
             sublist.addField({ id: 'custpage_codigo', type: serverWidget.FieldType.TEXT, label: 'codigo' });
             sublist.addField({ id: 'custpage_producto', type: serverWidget.FieldType.TEXT, label: 'producto' });
             sublist.addField({ id: 'custpage_horas', type: serverWidget.FieldType.TEXT, label: 'horas' });
@@ -352,6 +370,12 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
                     }
                     if (element.lin) {
                         sublist.setSublistValue({ id: 'custpage_lin', line: i, value: element.lin });
+                    }
+                    if (element.centro_costo_nombre) {
+                        sublist.setSublistValue({ id: 'custpage_ot_centro_costo', line: i, value: element.centro_costo_nombre });
+                    }
+                    if (element.ensamblaje_centro_costo_nombre) {
+                        sublist.setSublistValue({ id: 'custpage_ensamblaje_centro_costo', line: i, value: element.ensamblaje_centro_costo_nombre });
                     }
                     if (element.codigo) {
                         sublist.setSublistValue({ id: 'custpage_codigo', line: i, value: element.codigo });
@@ -420,7 +444,7 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             current.push('REND');
             current.push('CODIGO');
             current.push('PRODUCTO');
-            current.push('LIN');
+            current.push('LIN_MAT');
             current.push('COD_MAT');
             current.push('DES_MAT');
             current.push('CANTIDAD');
@@ -488,6 +512,8 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             current.push('CATEGORIA');
             current.push('EMPLEADO');
             current.push('LIN');
+            current.push('OT_CENTRO COSTO');
+            current.push('ENSAMBLAJE CENTRO COSTO');
             current.push('CODIGO');
             current.push('PRODUCTO');
             current.push('HORAS');
@@ -514,6 +540,8 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
                     current.push(element.categoria);
                     current.push(element.empleado_proveedor_servicio);
                     current.push(element.lin);
+                    current.push(element.centro_costo_nombre);
+                    current.push(element.ensamblaje_centro_costo_nombre);
                     current.push(element.codigo);
                     current.push(element.producto);
                     current.push(element.horas);
@@ -559,6 +587,8 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             current.push('FACTURA');
             current.push('PROVEEDOR_SERVICIO');
             current.push('LIN');
+            current.push('OT_CENTRO_COSTO');
+            current.push('ENSAMBLAJE_CENTRO_COSTO');
             current.push('CODIGO');
             current.push('PRODUCTO');
             current.push('HORAS');
@@ -585,6 +615,8 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
                     current.push(element.servicios);
                     current.push(element.empleado_proveedor_servicio);
                     current.push(element.lin);
+                    current.push(element.centro_costo_nombre);
+                    current.push(element.ensamblaje_centro_costo_nombre);
                     current.push(element.codigo);
                     current.push(element.producto);
                     current.push(element.horas);
@@ -629,6 +661,8 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             current.push('CATEGORIA');
             current.push('EMPLEADO');
             current.push('LIN');
+            current.push('OT_CENTRO_COSTO');
+            current.push('ENSAMBLAJE_CENTRO_COSTO');
             current.push('CODIGO');
             current.push('PRODUCTO');
             current.push('HORAS');
@@ -642,26 +676,6 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
             current.push('POL_2261');
             current.push('ACO_2271');
             current.push('TOT_GEN');
-
-            // TOTAL DE IMPORTE BRUTO POR CENTRO DE COSTO
-            // current.push('');
-            // current.push('total_cc_iny');
-            // current.push('total_cc_sem');
-            // current.push('total_cc_liq');
-            // current.push('total_cc_sot');
-            // current.push('total_cc_sol');
-            // current.push('total_cc_pol');
-            // current.push('total_cc_aco');
-
-            // TOTAL DE HORAS DE CIF POR LINEA
-            // current.push('');
-            // current.push('total_hr_iny');
-            // current.push('total_hr_sem');
-            // current.push('total_hr_liq');
-            // current.push('total_hr_sot');
-            // current.push('total_hr_sol');
-            // current.push('total_hr_pol');
-            // current.push('total_hr_aco');
 
             current = current.join(';');
             csvData.push(current);
@@ -678,6 +692,8 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
                     current.push(element.categoria);
                     current.push(element.empleado_proveedor_servicio);
                     current.push(element.lin);
+                    current.push(element.centro_costo_nombre);
+                    current.push(element.ensamblaje_centro_costo_nombre);
                     current.push(element.codigo);
                     current.push(element.producto);
                     current.push(element.horas);
@@ -691,26 +707,6 @@ define([`${PATH_}Bio.Library.Helper`, 'N'],
                     current.push(element.total_pol);
                     current.push(element.total_aco);
                     current.push(element.total_gen);
-
-                    // TOTAL DE IMPORTE BRUTO POR CENTRO DE COSTO
-                    // current.push('');
-                    // current.push(element.total_cc_iny);
-                    // current.push(element.total_cc_sem);
-                    // current.push(element.total_cc_liq);
-                    // current.push(element.total_cc_sot);
-                    // current.push(element.total_cc_sol);
-                    // current.push(element.total_cc_pol);
-                    // current.push(element.total_cc_aco);
-
-                    // TOTAL DE HORAS DE CIF POR LINEA
-                    // current.push('');
-                    // current.push(element.total_hr_iny);
-                    // current.push(element.total_hr_sem);
-                    // current.push(element.total_hr_liq);
-                    // current.push(element.total_hr_sot);
-                    // current.push(element.total_hr_sol);
-                    // current.push(element.total_hr_pol);
-                    // current.push(element.total_hr_aco);
 
                     current = current.join(';');
                     csvData.push(current);

@@ -108,6 +108,10 @@ define(['N'],
                     let empleado_proveedor_servicio = value_prod.empleado_nombre;
                     let lin_id = value_rep.linea_ot_envasado_empacado;
                     let lin = value_rep.linea_nombre_ot_envasado_empacado;
+                    let centro_costo = value_rep.centro_costo;
+                    let centro_costo_nombre = value_rep.centro_costo_nombre;
+                    let ensamblaje_centro_costo = value_rep.ensamblaje_centro_costo;
+                    let ensamblaje_centro_costo_nombre = value_rep.ensamblaje_centro_costo_nombre;
                     let codigo = value_rep.codigo_oracle;
                     let producto = value_rep.descripcion;
                     // Datos de Produccion
@@ -127,24 +131,6 @@ define(['N'],
                     let total_pol = value_prod.total_pol;
                     let total_aco = value_prod.total_aco;
                     let total_gen = value_prod.total_gen;
-
-                    // TOTAL DE IMPORTE BRUTO POR CENTRO DE COSTO
-                    // let total_cc_iny = value_rep.total_cc_iny;
-                    // let total_cc_sem = value_rep.total_cc_sem;
-                    // let total_cc_liq = value_rep.total_cc_liq;
-                    // let total_cc_sot = value_rep.total_cc_sot;
-                    // let total_cc_sol = value_rep.total_cc_sol;
-                    // let total_cc_pol = value_rep.total_cc_pol;
-                    // let total_cc_aco = value_rep.total_cc_aco;
-
-                    // TOTAL DE HORAS DE CIF POR LINEA
-                    // let total_hr_iny = value_rep.total_hr_iny;
-                    // let total_hr_sem = value_rep.total_hr_sem;
-                    // let total_hr_liq = value_rep.total_hr_liq;
-                    // let total_hr_sot = value_rep.total_hr_sot;
-                    // let total_hr_sol = value_rep.total_hr_sol;
-                    // let total_hr_pol = value_rep.total_hr_pol;
-                    // let total_hr_aco = value_rep.total_hr_aco;
 
                     // Procesar reporte
                     rend = isNaN(rend) ? '' : `${Math.round10(rend, -2).toFixed(2)}%`;
@@ -170,6 +156,10 @@ define(['N'],
                         empleado_proveedor_servicio: empleado_proveedor_servicio,
                         lin_id: lin_id,
                         lin: lin,
+                        centro_costo: centro_costo,
+                        centro_costo_nombre: centro_costo_nombre,
+                        ensamblaje_centro_costo: ensamblaje_centro_costo,
+                        ensamblaje_centro_costo_nombre: ensamblaje_centro_costo_nombre,
                         codigo: codigo,
                         producto: producto,
                         // Datos de Produccion
@@ -189,24 +179,6 @@ define(['N'],
                         total_pol: total_pol,
                         total_aco: total_aco,
                         total_gen: total_gen,
-
-                        // TOTAL DE IMPORTE BRUTO POR CENTRO DE COSTO
-                        // total_cc_iny: total_cc_iny,
-                        // total_cc_sem: total_cc_sem,
-                        // total_cc_liq: total_cc_liq,
-                        // total_cc_sot: total_cc_sot,
-                        // total_cc_sol: total_cc_sol,
-                        // total_cc_pol: total_cc_pol,
-                        // total_cc_aco: total_cc_aco,
-
-                        // TOTAL DE HORAS DE CIF POR LINEA
-                        // total_hr_iny: total_hr_iny,
-                        // total_hr_sem: total_hr_sem,
-                        // total_hr_liq: total_hr_liq,
-                        // total_hr_sot: total_hr_sot,
-                        // total_hr_sol: total_hr_sol,
-                        // total_hr_pol: total_hr_pol,
-                        // total_hr_aco: total_hr_aco,
                     }
 
                     if (!(value_prod.empleado == '22099' || value_prod.empleado_nombre == 'PERSONAL TERCERO')) {
@@ -246,11 +218,13 @@ define(['N'],
             }
 
             // Agregar totales CIF
-            if (Object.keys(data).length > 0) { // Validar data CIF
-                if (Object.keys(parameters).length > 0) { // Validar parametros
-                    if (parameters.dataFactorCIF) { // Validar factor CIF - por año y mes
-                        let dataFactorCIF = parameters.dataFactorCIF;
-                        data = addTotalesCIF(data, dataFactorCIF);
+            if (Object.keys(parameters).length > 0) { // Validar parametros
+                if (Object.keys(data).length > 0) { // Validar data CIF
+                    if (parameters.dataFactorCIF) { // Validar factor CIF
+                        if (parameters.button == 'csv') { // Validar formato de presentación
+                            let dataFactorCIF = parameters.dataFactorCIF;
+                            data = addTotalesCIF(data, dataFactorCIF);
+                        }
                     }
                 }
             }
@@ -263,7 +237,16 @@ define(['N'],
             let json = {};
 
             // LINEA VACIA
-            json = {};
+            json = {
+                estado: '',
+                total_iny: '',
+                total_sem: '',
+                total_liq: '',
+                total_sot: '',
+                total_sol: '',
+                total_pol: '',
+                total_aco: '',
+            };
             data.push(json);
 
             // TOTAL DE IMPORTE BRUTO POR CENTRO DE COSTO
@@ -276,7 +259,7 @@ define(['N'],
                 total_sol: dataFactorCIF.total_cc_sol,
                 total_pol: dataFactorCIF.total_cc_pol,
                 total_aco: dataFactorCIF.total_cc_aco,
-            }
+            };
             data.push(json);
 
             // TOTAL DE HORAS DE CIF POR LINEA
@@ -289,7 +272,7 @@ define(['N'],
                 total_sol: dataFactorCIF.total_hr_sol,
                 total_pol: dataFactorCIF.total_hr_pol,
                 total_aco: dataFactorCIF.total_hr_aco,
-            }
+            };
             data.push(json);
 
             // FACTOR CIF POR LINEA / CENTRO DE COSTO
@@ -302,7 +285,7 @@ define(['N'],
                 total_sol: dataFactorCIF.factor_cif_sol,
                 total_pol: dataFactorCIF.factor_cif_pol,
                 total_aco: dataFactorCIF.factor_cif_aco,
-            }
+            };
             data.push(json);
 
             return data;

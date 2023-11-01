@@ -242,7 +242,8 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                     let dataOT_RegistrosRelacionados = objSearch.getDataOT_RegistrosRelacionados(subsidiary, dataOTByFecha['data']);
                     let dataOT_EmisionesOrdenesProduccion = objSearch.getDataOT_EmisionesOrdenesProduccion(subsidiary, dataOT_RegistrosRelacionados['data'])
                     let dataOT_DatosProduccion = objSearch.getDataOT_DatosProduccion(subsidiary, dateFrom, dateTo, dataOT['data']);
-                    let dataOT_Completo = objProcess.getDataOT_Completo(dataOT['data'], dataRevaluacion['data'], dataOT_RegistrosRelacionados['data'], dataOT_EmisionesOrdenesProduccion['data'], dataOT_DatosProduccion['data'], eliminar_datos = false);
+                    let dataConf_CentroCosto_Linea = objSearch.getDataConf_CentroCosto_Linea();
+                    let dataOT_Completo = objProcess.getDataOT_Completo(dataOT['data'], dataRevaluacion['data'], dataOT_RegistrosRelacionados['data'], dataOT_EmisionesOrdenesProduccion['data'], dataOT_DatosProduccion['data'], dataConf_CentroCosto_Linea['data']);
 
                     // Performance
                     // log.debug('Time', new Date().toLocaleString('es-ES'));
@@ -273,7 +274,7 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
                     let dataMD = objProcessMe.getDataMD(dataOT_Completo);
                     let dataMOD = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'mod');
                     let dataSRV = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'srv');
-                    let dataCIF = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'mod_srv', { 'anio': year, 'mes': month, 'dataFactorCIF': dataFactorCIF[year][month] });
+                    let dataCIF = objProcessMe.getDataMOD_SRV(dataOT_Completo, 'mod_srv', { 'anio': year, 'mes': month, 'dataFactorCIF': dataFactorCIF[year][month], 'button': button });
                     let dataFactorCIF_Formateada = objProcessMe.getDataFactorCIF(dataFactorCIF);
 
                     // Debug
