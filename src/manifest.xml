@@ -1,4 +1,19 @@
 <manifest projecttype="ACCOUNTCUSTOMIZATION">
-  <projectname>4-ProyectoCostoRealEstructurado</projectname>
+  <projectname>5-ProyectoReporteCostoRealEstructurado</projectname>
   <frameworkversion>1.0</frameworkversion>
+  <dependencies>
+    <features>
+      <feature required="true">SERVERSIDESCRIPTING</feature>
+      <feature required="false">CRM</feature>
+      <feature required="true">CLASSES</feature>
+      <feature required="false">MULTILANGUAGE</feature>
+      <feature required="false">CUSTOMSEGMENTS</feature>
+      <feature required="false">EXTREMELIST</feature>
+      <feature required="false">MAILMERGE</feature>
+      <feature required="true">CUSTOMRECORDS</feature>
+    </features>
+    <objects>
+      <object>customlist1334</object>
+    </objects>
+  </dependencies>
 </manifest>
