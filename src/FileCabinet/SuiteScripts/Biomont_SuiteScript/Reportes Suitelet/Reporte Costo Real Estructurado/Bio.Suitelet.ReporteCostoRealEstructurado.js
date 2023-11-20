@@ -31,7 +31,7 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
             // Mostrar Grupo de Campos
             form.addFieldGroup({
                 id: 'custpage_group',
-                label: 'Filters',
+                label: 'Filtros',
             })
             let fieldSubsidiary = form.addField({
                 id: 'custpage_field_subsidiary',
@@ -144,7 +144,7 @@ define([`${PATH}Bio.Library.Search`, `${PATH}Bio.Library.Process`, `${PATH}Bio.L
         function createSublist(form, dataMD, dataMOD, dataSRV, dataCIF, checkPaginate) {
             let fDecimal = 6;
 
-            // Tipo de Sublista
+            // Tipo de sublista
             let sublistType = null;
             if (checkPaginate == 'F') {
                 sublistType = serverWidget.SublistType.LIST;

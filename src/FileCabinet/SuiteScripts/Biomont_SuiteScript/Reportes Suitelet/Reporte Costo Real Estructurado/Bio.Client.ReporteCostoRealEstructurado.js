@@ -158,7 +158,8 @@ define(['N'],
             let errores = {};
 
             for (var key in CONFIG_RECORD.fields_mandatory) {
-                if (!recordContext.getValue(CONFIG_RECORD.fields_mandatory[key]['id'])) {
+                let fieldId = CONFIG_RECORD.fields_mandatory[key]['id'];
+                if (!recordContext.getValue(fieldId)) {
                     errores[CONFIG_RECORD.fields_mandatory[key]['id']] = CONFIG_RECORD.fields_mandatory[key]['label'];
                 };
             }

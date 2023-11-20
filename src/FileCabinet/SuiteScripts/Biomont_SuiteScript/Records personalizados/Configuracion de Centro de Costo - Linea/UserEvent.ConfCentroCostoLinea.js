@@ -41,18 +41,6 @@ define(['N'],
                 fieldIsInactive.updateDisplayType({
                     displayType: serverWidget.FieldDisplayType.HIDDEN
                 });
-
-                // Recuperar un campo del formulario
-                let fieldName = form.getField({
-                    id: 'name'
-                });
-
-                // Convertir en hidden un campo
-                if (fieldName) {
-                    fieldName.updateDisplayType({
-                        displayType: serverWidget.FieldDisplayType.HIDDEN
-                    });
-                }
         }
 
         return { beforeLoad };
